@@ -1,5 +1,5 @@
 //  Big Event
-//  Created by Jonathan Willing on 10/4/15.
+//  Created by Jonathan Willing
 
 #import "BENavigationController.h"
 
@@ -9,9 +9,11 @@
 
 @implementation BENavigationController
 
+
+#pragma mark - Lifecycle
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
 
 /*
