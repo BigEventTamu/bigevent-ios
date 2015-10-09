@@ -15,6 +15,8 @@
 		AB76ADEB1BC1C5B60000C91B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB76ADEA1BC1C5B60000C91B /* Assets.xcassets */; };
 		AB76ADEE1BC1C5B60000C91B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB76ADEC1BC1C5B60000C91B /* LaunchScreen.storyboard */; };
 		ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BB41BC8292600781666 /* BEAccountViewController.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BC21BC8661900781666 /* BEAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC11BC8661900781666 /* BEAccountController.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC41BC8662900781666 /* BEAccount.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,10 @@
 		AB76ADEF1BC1C5B60000C91B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABBA0BB31BC8292600781666 /* BEAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccountViewController.h; sourceTree = "<group>"; };
 		ABBA0BB41BC8292600781666 /* BEAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccountViewController.m; sourceTree = "<group>"; };
+		ABBA0BC01BC8661900781666 /* BEAccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccountController.h; sourceTree = "<group>"; };
+		ABBA0BC11BC8661900781666 /* BEAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccountController.m; sourceTree = "<group>"; };
+		ABBA0BC31BC8662900781666 /* BEAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccount.h; sourceTree = "<group>"; };
+		ABBA0BC41BC8662900781666 /* BEAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccount.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +107,10 @@
 		ABBA0BC71BC8665300781666 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				ABBA0BC31BC8662900781666 /* BEAccount.h */,
+				ABBA0BC41BC8662900781666 /* BEAccount.m */,
+				ABBA0BC01BC8661900781666 /* BEAccountController.h */,
+				ABBA0BC11BC8661900781666 /* BEAccountController.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -177,8 +187,10 @@
 			files = (
 				ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */,
 				AB76ADE61BC1C5B60000C91B /* BERootViewController.m in Sources */,
+				ABBA0BC21BC8661900781666 /* BEAccountController.m in Sources */,
 				AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */,
 				AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */,
+				ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */,
 				AB76ADE01BC1C5B60000C91B /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
