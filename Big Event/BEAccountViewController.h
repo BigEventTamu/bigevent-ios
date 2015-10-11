@@ -3,6 +3,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface BERootViewController : UITableViewController
+@interface BEAccountViewController : UITableViewController
 
 @end

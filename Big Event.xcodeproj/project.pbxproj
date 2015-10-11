@@ -14,6 +14,9 @@
 		AB76ADE91BC1C5B60000C91B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB76ADE71BC1C5B60000C91B /* Main.storyboard */; };
 		AB76ADEB1BC1C5B60000C91B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB76ADEA1BC1C5B60000C91B /* Assets.xcassets */; };
 		AB76ADEE1BC1C5B60000C91B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB76ADEC1BC1C5B60000C91B /* LaunchScreen.storyboard */; };
+		ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BB41BC8292600781666 /* BEAccountViewController.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BC21BC8661900781666 /* BEAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC11BC8661900781666 /* BEAccountController.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC41BC8662900781666 /* BEAccount.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +32,12 @@
 		AB76ADEA1BC1C5B60000C91B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AB76ADED1BC1C5B60000C91B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AB76ADEF1BC1C5B60000C91B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ABBA0BB31BC8292600781666 /* BEAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccountViewController.h; sourceTree = "<group>"; };
+		ABBA0BB41BC8292600781666 /* BEAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccountViewController.m; sourceTree = "<group>"; };
+		ABBA0BC01BC8661900781666 /* BEAccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccountController.h; sourceTree = "<group>"; };
+		ABBA0BC11BC8661900781666 /* BEAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccountController.m; sourceTree = "<group>"; };
+		ABBA0BC31BC8662900781666 /* BEAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccount.h; sourceTree = "<group>"; };
+		ABBA0BC41BC8662900781666 /* BEAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccount.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,13 +70,11 @@
 		AB76ADDD1BC1C5B60000C91B /* Big Event */ = {
 			isa = PBXGroup;
 			children = (
+				AB76ADE71BC1C5B60000C91B /* Main.storyboard */,
 				AB76ADE11BC1C5B60000C91B /* BEAppDelegate.h */,
 				AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */,
-				AB4F2B141BC1CA99003033B7 /* BENavigationController.h */,
-				AB4F2B151BC1CA99003033B7 /* BENavigationController.m */,
-				AB76ADE41BC1C5B60000C91B /* BERootViewController.h */,
-				AB76ADE51BC1C5B60000C91B /* BERootViewController.m */,
-				AB76ADE71BC1C5B60000C91B /* Main.storyboard */,
+				ABBA0BC61BC8663D00781666 /* View Controllers */,
+				ABBA0BC71BC8665300781666 /* Models */,
 				AB76ADDE1BC1C5B60000C91B /* Supporting Files */,
 			);
 			path = "Big Event";
@@ -82,6 +89,30 @@
 				AB76ADDF1BC1C5B60000C91B /* main.m */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ABBA0BC61BC8663D00781666 /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				AB4F2B141BC1CA99003033B7 /* BENavigationController.h */,
+				AB4F2B151BC1CA99003033B7 /* BENavigationController.m */,
+				AB76ADE41BC1C5B60000C91B /* BERootViewController.h */,
+				AB76ADE51BC1C5B60000C91B /* BERootViewController.m */,
+				ABBA0BB31BC8292600781666 /* BEAccountViewController.h */,
+				ABBA0BB41BC8292600781666 /* BEAccountViewController.m */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		ABBA0BC71BC8665300781666 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				ABBA0BC31BC8662900781666 /* BEAccount.h */,
+				ABBA0BC41BC8662900781666 /* BEAccount.m */,
+				ABBA0BC01BC8661900781666 /* BEAccountController.h */,
+				ABBA0BC11BC8661900781666 /* BEAccountController.m */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -154,9 +185,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */,
 				AB76ADE61BC1C5B60000C91B /* BERootViewController.m in Sources */,
+				ABBA0BC21BC8661900781666 /* BEAccountController.m in Sources */,
 				AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */,
 				AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */,
+				ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */,
 				AB76ADE01BC1C5B60000C91B /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
