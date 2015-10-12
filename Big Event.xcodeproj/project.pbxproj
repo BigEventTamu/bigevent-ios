@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		006BACEB99AD40B6A505383A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 962FCDB207B7B1E903C2D045 /* libPods.a */; };
 		AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB4F2B151BC1CA99003033B7 /* BENavigationController.m */; settings = {ASSET_TAGS = (); }; };
 		AB76ADE01BC1C5B60000C91B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADDF1BC1C5B60000C91B /* main.m */; };
 		AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */; };
@@ -20,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05734F9F4CBE0E24B5676833 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		962FCDB207B7B1E903C2D045 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB4F2B141BC1CA99003033B7 /* BENavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BENavigationController.h; sourceTree = "<group>"; };
 		AB4F2B151BC1CA99003033B7 /* BENavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BENavigationController.m; sourceTree = "<group>"; };
 		AB76ADDB1BC1C5B60000C91B /* Big Event.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Big Event.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -38,6 +41,7 @@
 		ABBA0BC11BC8661900781666 /* BEAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccountController.m; sourceTree = "<group>"; };
 		ABBA0BC31BC8662900781666 /* BEAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccount.h; sourceTree = "<group>"; };
 		ABBA0BC41BC8662900781666 /* BEAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccount.m; sourceTree = "<group>"; };
+		E551F6C108B3CAE8451BD60A /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,17 +49,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006BACEB99AD40B6A505383A /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A59F3BF3A218B10B7B4E321 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				05734F9F4CBE0E24B5676833 /* Pods.debug.xcconfig */,
+				E551F6C108B3CAE8451BD60A /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		AB76ADD21BC1C5B60000C91B = {
 			isa = PBXGroup;
 			children = (
 				AB76ADDD1BC1C5B60000C91B /* Big Event */,
 				AB76ADDC1BC1C5B60000C91B /* Products */,
+				1A59F3BF3A218B10B7B4E321 /* Pods */,
+				BAC65151BC9966C361447E56 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -115,6 +131,14 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
+		BAC65151BC9966C361447E56 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				962FCDB207B7B1E903C2D045 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -122,9 +146,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AB76ADF21BC1C5B60000C91B /* Build configuration list for PBXNativeTarget "Big Event" */;
 			buildPhases = (
+				FFBC0E3EBFE8BB9236C38E23 /* Check Pods Manifest.lock */,
 				AB76ADD71BC1C5B60000C91B /* Sources */,
 				AB76ADD81BC1C5B60000C91B /* Frameworks */,
 				AB76ADD91BC1C5B60000C91B /* Resources */,
+				0884CD1E0C1419D4F52833AC /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -179,6 +205,39 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		0884CD1E0C1419D4F52833AC /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FFBC0E3EBFE8BB9236C38E23 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		AB76ADD71BC1C5B60000C91B /* Sources */ = {
@@ -301,6 +360,7 @@
 		};
 		AB76ADF31BC1C5B60000C91B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05734F9F4CBE0E24B5676833 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Big Event/Info.plist";
@@ -312,6 +372,7 @@
 		};
 		AB76ADF41BC1C5B60000C91B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E551F6C108B3CAE8451BD60A /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Big Event/Info.plist";
