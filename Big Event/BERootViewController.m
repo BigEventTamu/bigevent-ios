@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BERootViewController.h"
+#import "BEClient.h"
 
 @interface BERootViewController ()
 
@@ -16,12 +17,26 @@
 	[super viewDidLoad];
 	
 	[self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
+	[self registerNotifications];
 }
 
 
 #pragma mark - Account Segue
 
 - (IBAction)accountDone:(UIStoryboardSegue *)segue {
+	NSLog(@"%s",__PRETTY_FUNCTION__);
+}
+
+
+#pragma mark - Notifications
+
+- (void)registerNotifications {
+	NSNotificationCenter *nc = NSNotificationCenter.defaultCenter;
+	[nc addObserver:self selector:@selector(clientDidLogout:) name:BEClientDidLogoutNotification object:nil];
+}
+
+- (void)clientDidLogout:(NSNotification *)note {
+	// remove forms
 	NSLog(@"%s",__PRETTY_FUNCTION__);
 }
 

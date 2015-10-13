@@ -18,6 +18,7 @@
 		ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BB41BC8292600781666 /* BEAccountViewController.m */; settings = {ASSET_TAGS = (); }; };
 		ABBA0BC21BC8661900781666 /* BEAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC11BC8661900781666 /* BEAccountController.m */; settings = {ASSET_TAGS = (); }; };
 		ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC41BC8662900781666 /* BEAccount.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BCE1BCC1DB500781666 /* BEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BCD1BCC1DB500781666 /* BEClient.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,9 @@
 		ABBA0BC11BC8661900781666 /* BEAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccountController.m; sourceTree = "<group>"; };
 		ABBA0BC31BC8662900781666 /* BEAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccount.h; sourceTree = "<group>"; };
 		ABBA0BC41BC8662900781666 /* BEAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccount.m; sourceTree = "<group>"; };
+		ABBA0BC91BCC1A6A00781666 /* BEFormViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEFormViewController.m; sourceTree = "<group>"; };
+		ABBA0BCC1BCC1DB500781666 /* BEClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEClient.h; sourceTree = "<group>"; };
+		ABBA0BCD1BCC1DB500781666 /* BEClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEClient.m; sourceTree = "<group>"; };
 		E551F6C108B3CAE8451BD60A /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,6 +95,7 @@
 				AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */,
 				ABBA0BC61BC8663D00781666 /* View Controllers */,
 				ABBA0BC71BC8665300781666 /* Models */,
+				ABBA0BCB1BCC1D8F00781666 /* Networking */,
 				AB76ADDE1BC1C5B60000C91B /* Supporting Files */,
 			);
 			path = "Big Event";
@@ -125,10 +130,19 @@
 			children = (
 				ABBA0BC31BC8662900781666 /* BEAccount.h */,
 				ABBA0BC41BC8662900781666 /* BEAccount.m */,
-				ABBA0BC01BC8661900781666 /* BEAccountController.h */,
-				ABBA0BC11BC8661900781666 /* BEAccountController.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		ABBA0BCB1BCC1D8F00781666 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				ABBA0BC01BC8661900781666 /* BEAccountController.h */,
+				ABBA0BC11BC8661900781666 /* BEAccountController.m */,
+				ABBA0BCC1BCC1DB500781666 /* BEClient.h */,
+				ABBA0BCD1BCC1DB500781666 /* BEClient.m */,
+			);
+			name = Networking;
 			sourceTree = "<group>";
 		};
 		BAC65151BC9966C361447E56 /* Frameworks */ = {
@@ -247,6 +261,7 @@
 				ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */,
 				AB76ADE61BC1C5B60000C91B /* BERootViewController.m in Sources */,
 				ABBA0BC21BC8661900781666 /* BEAccountController.m in Sources */,
+				ABBA0BCE1BCC1DB500781666 /* BEClient.m in Sources */,
 				AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */,
 				AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */,
 				ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */,

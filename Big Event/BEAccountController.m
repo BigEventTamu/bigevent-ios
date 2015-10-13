@@ -3,6 +3,13 @@
 
 #import "BEAccountController.h"
 
+@interface BEAccountController ()
+
+@property (nonatomic, readwrite, strong) BEClient *client;
+
+@end
+
+
 @implementation BEAccountController
 
 
@@ -17,6 +24,17 @@
 	});
 	
 	return controller;
+}
+
+
+#pragma mark - Client
+
+- (BEClient *)client {
+	if (_client == nil) {
+		_client = [[BEClient alloc] init];
+	}
+	
+	return _client;
 }
 
 @end
