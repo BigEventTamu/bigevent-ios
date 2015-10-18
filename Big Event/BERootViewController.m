@@ -2,7 +2,8 @@
 //  Created by Jonathan Willing
 
 #import "BERootViewController.h"
-#import "BEClient.h"
+#import "BEAccountController.h"
+#import "BEConstants.h"
 
 @interface BERootViewController ()
 
@@ -18,6 +19,13 @@
 	
 	[self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
 	[self registerNotifications];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	// If not authenticated, present the accounts modal.
+	if (!BEAccountController.sharedController.client.authenticated) {
+		[self performSegueWithIdentifier:BEAccountSegueIdentifier sender:nil];
+	}
 }
 
 

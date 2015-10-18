@@ -2,12 +2,13 @@
 //  Created by Jonathan Willing
 
 #import "BEAccountViewController.h"
+#import "BEAccountController.h"
+#import "BEConstants.h"
 
-static NSString * const BEDoneSegueIdentifier = @"done";
-static NSString * const BECancelSegueIdentifier = @"cancel";
 
 @interface BEAccountViewController ()
 
+@property (weak) IBOutlet UIBarButtonItem *cancelButton;
 @property (weak) IBOutlet UITextField *usernameField;
 @property (weak) IBOutlet UITextField *passwordField;
 @property (weak) IBOutlet UIButton *authenticationActionButton;
@@ -24,6 +25,11 @@ static NSString * const BECancelSegueIdentifier = @"cancel";
     [super viewDidLoad];
 	
 	[self.usernameField becomeFirstResponder];
+	[self setup];
+}
+
+- (void)setup {
+	self.cancelButton.enabled = BEAccountController.sharedController.client.authenticated;
 }
 
 
@@ -37,7 +43,7 @@ static NSString * const BECancelSegueIdentifier = @"cancel";
 #pragma mark - Segues
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-	if ([identifier isEqualToString:BEDoneSegueIdentifier]) {
+	if ([identifier isEqualToString:BEAccountDoneSegueIdentifier]) {
 		
 		// async login
 		

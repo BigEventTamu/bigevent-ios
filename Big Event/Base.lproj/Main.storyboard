@@ -203,17 +203,18 @@
                     <navigationItem key="navigationItem" id="nh2-Th-Mjv">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="goi-i5-8o6">
                             <connections>
-                                <segue destination="H2k-kW-MSa" kind="unwind" identifier="cancel" unwindAction="accountDone:" id="8DJ-ZA-FA9"/>
+                                <segue destination="H2k-kW-MSa" kind="unwind" identifier="account-cancel" unwindAction="accountDone:" id="8DJ-ZA-FA9"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="ZyN-hy-F3x">
                             <connections>
-                                <segue destination="H2k-kW-MSa" kind="unwind" identifier="done" unwindAction="accountDone:" id="fwp-tG-1bz"/>
+                                <segue destination="H2k-kW-MSa" kind="unwind" identifier="account-done" unwindAction="accountDone:" id="fwp-tG-1bz"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="authenticationActionButton" destination="QnV-FS-8Hg" id="ftp-cS-tU1"/>
+                        <outlet property="cancelButton" destination="goi-i5-8o6" id="Rbh-vb-KwS"/>
                         <outlet property="passwordField" destination="56v-eh-RqN" id="w64-oK-YTQ"/>
                         <outlet property="usernameField" destination="6VC-PZ-icg" id="M3i-1V-b1D"/>
                     </connections>
