@@ -4,7 +4,7 @@
 #import <Foundation/Foundation.h>
 #import "BEClient.h"
 
-@interface BEAccountController : NSObject
+@interface BEClientController : NSObject
 
 + (instancetype)sharedController;
 

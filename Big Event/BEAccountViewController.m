@@ -2,15 +2,19 @@
 //  Created by Jonathan Willing
 
 #import "BEAccountViewController.h"
-#import "BEAccountController.h"
+#import "BEClientController.h"
 #import "BEConstants.h"
 
 
-@interface BEAccountViewController ()
+@interface BEAccountViewController () <UITextFieldDelegate>
 
-@property (weak) IBOutlet UIBarButtonItem *cancelButton;
+@property (nonatomic, assign) BOOL authenticationEnabled;
+
 @property (weak) IBOutlet UITextField *usernameField;
 @property (weak) IBOutlet UITextField *passwordField;
+@property (weak) IBOutlet UITextField *providerField;
+@property (weak) IBOutlet UIBarButtonItem *doneButton;
+@property (weak) IBOutlet UIBarButtonItem *cancelButton;
 @property (weak) IBOutlet UIButton *authenticationActionButton;
 
 @end
@@ -25,11 +29,9 @@
     [super viewDidLoad];
 	
 	[self.usernameField becomeFirstResponder];
-	[self setup];
-}
-
-- (void)setup {
-	self.cancelButton.enabled = BEAccountController.sharedController.client.authenticated;
+	
+	self.authenticationEnabled = YES;
+	[self updateState];
 }
 
 
@@ -37,6 +39,27 @@
 
 - (IBAction)performAuthenticationAction:(UIButton *)sender {
 	// async login (or logout)
+	
+	self.authenticationEnabled = NO;
+	[self updateState];
+	
+	BEAccount *account = [self createAccount];
+	[BEClientController.sharedController.client authenticateWithAccount:account completion:^(BOOL success) {
+		self.authenticationEnabled = YES;
+		[self updateState];
+		
+		NSLog(@"authentication successful: %x", success);
+		
+		if (success) {
+			
+		} else {
+			
+		}
+	}];
+}
+
+- (IBAction)textFieldDidChange:(id)sender {
+	[self updateState];
 }
 
 
@@ -51,6 +74,32 @@
 	}
 	
 	return YES;
+}
+
+#pragma mark - State
+
+- (BEAccount *)createAccount {
+	BEAccount *account = [[BEAccount alloc] init];
+	account.username = self.usernameField.text;
+	account.password = self.passwordField.text;
+	account.provider = self.providerField.text;
+	
+	if (account.provider.length == 0) {
+		account.provider = BEAccountDefaultProvider;
+	}
+	
+	return account;
+}
+
+- (void)updateState {
+	BOOL canAuthenticate = (self.usernameField.text.length > 0 && self.passwordField.text.length > 0);
+	
+	self.doneButton.enabled = canAuthenticate && self.authenticationEnabled;
+	self.authenticationActionButton.enabled = self.authenticationEnabled;
+	
+	//	// We don't want to be able to cancel out if we aren't authenticated.
+	BOOL authenticationRequired = !BEClientController.sharedController.client.authenticated;
+	self.cancelButton.enabled = !(authenticationRequired || self.authenticationEnabled);
 }
 
 

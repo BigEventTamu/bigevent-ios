@@ -2,7 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BERootViewController.h"
-#import "BEAccountController.h"
+#import "BEClientController.h"
 #import "BEConstants.h"
 
 @interface BERootViewController ()
@@ -23,7 +23,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
 	// If not authenticated, present the accounts modal.
-	if (!BEAccountController.sharedController.client.authenticated) {
+	if (!BEClientController.sharedController.client.authenticated) {
 		[self performSegueWithIdentifier:BEAccountSegueIdentifier sender:nil];
 	}
 }

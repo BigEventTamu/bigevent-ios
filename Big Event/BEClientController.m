@@ -1,22 +1,22 @@
 //  Big Event
 //  Created by Jonathan Willing
 
-#import "BEAccountController.h"
+#import "BEClientController.h"
 
-@interface BEAccountController ()
+@interface BEClientController ()
 
 @property (nonatomic, readwrite, strong) BEClient *client;
 
 @end
 
 
-@implementation BEAccountController
+@implementation BEClientController
 
 
 #pragma mark - Lifecycle
 
 + (instancetype)sharedController {
-	static BEAccountController *controller = nil;
+	static BEClientController *controller = nil;
 	
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
