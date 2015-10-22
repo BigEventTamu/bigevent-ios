@@ -5,6 +5,8 @@
 #import "BEClientController.h"
 #import "BEConstants.h"
 
+#import <SVProgressHUD/SVProgressHUD.h>
+
 @interface BERootViewController ()
 
 @end
@@ -17,6 +19,9 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	// Configure the shared progress HUD.
+	[self configureHUD];
+	
 	[self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
 	[self registerNotifications];
 }
@@ -26,6 +31,12 @@
 	if (!BEClientController.sharedController.client.authenticated) {
 		[self performSegueWithIdentifier:BEAccountSegueIdentifier sender:nil];
 	}
+}
+
+- (void)configureHUD {
+	[SVProgressHUD setDefaultStyle:SVProgressHUDStyleLight];
+	[SVProgressHUD setDefaultMaskType:SVProgressHUDMaskTypeBlack];
+	[SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeNative];
 }
 
 

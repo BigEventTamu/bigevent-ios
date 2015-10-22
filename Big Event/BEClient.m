@@ -2,27 +2,37 @@
 //  Created by Jonathan Willing
 
 #import "BEClient.h"
+#import "NSDictionary+BEEncoding.h"
+
 #import <UICKeyChainStore/UICKeyChainStore.h>
 
-static NSString * const BEClientKeychainTokenIdentifier = @"authentication-token";
+
+// Notifications.
 NSString * const BEClientDidLogoutNotification = @"BEClientDidLogout";
 
+// Keychain.
+static NSString * const BEClientKeychainTokenIdentifier = @"authentication-token";
+static NSString * const BEClientKeychainUsernameIdentifier = @"username";
+static NSString * const BEClientKeychainPasswordIdentifier = @"password";
+static NSString * const BEClientKeychainProviderIdentifier = @"provider";
+
 // Resources
-static NSString * const BEClientAuthenticationResource = @"get-token";
+static NSString * const BEClientAuthenticationResource = @"get-token/";
 
 // Typedefs.
 typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSError *error);
 
+
 @interface BEClient () <NSURLSessionDelegate>
 
-@property (nonatomic, assign) NSString *token;
-@property (readwrite, strong) BEAccount *currentAccount;
+@property (nonatomic, copy) NSString *token;
+@property (readwrite, nonatomic, strong) BEAccount *currentAccount;
 
 @end
 
 
 @implementation BEClient
-
+@synthesize currentAccount = _currentAccount;
 
 #pragma mark - Keychain
 
@@ -36,6 +46,26 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 - (NSString *)token {
 	return self.keychain[BEClientKeychainTokenIdentifier];
+}
+
+- (void)setCurrentAccount:(BEAccount *)currentAccount {
+	_currentAccount = currentAccount;
+	
+	self.keychain[BEClientKeychainUsernameIdentifier] = currentAccount.username;
+	self.keychain[BEClientKeychainPasswordIdentifier] = currentAccount.password;
+	self.keychain[BEClientKeychainProviderIdentifier] = currentAccount.provider;
+}
+
+- (BEAccount *)currentAccount {
+	if (_currentAccount == nil) {
+		_currentAccount = [[BEAccount alloc] init];
+		
+		_currentAccount.username = self.keychain[BEClientKeychainUsernameIdentifier];
+		_currentAccount.password = self.keychain[BEClientKeychainPasswordIdentifier];
+		_currentAccount.provider = self.keychain[BEClientKeychainProviderIdentifier];
+	}
+	
+	return _currentAccount;
 }
 
 
@@ -53,22 +83,20 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 #pragma mark - Networking
 
-- (NSURLSessionUploadTask *)POSTRequestWithResource:(NSString *)resource parameters:(NSDictionary *)parameters completionHandler:(BERequestCompletion)completionHandler {
-	NSURL *resourceURL = [self resourceURLWithBaseProvider:self.currentProvider resource:resource];
+- (NSURLSessionDataTask *)POSTRequestWithResource:(NSString *)resource parameters:(NSDictionary *)parameters completionHandler:(BERequestCompletion)completionHandler {
+	NSURL *resourceURL = [self resourceURLWithBaseProvider:self.currentAccount.provider resource:resource];
+	
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:resourceURL];
+	request.HTTPBody = [parameters.be_URLEncodedParameters dataUsingEncoding:NSUTF8StringEncoding];
+	request.HTTPMethod = @"POST";
+	request.allHTTPHeaderFields = @{
+		@"Content-Type": @"application/x-www-form-urlencoded"
+	};
+	
 	NSURLSessionConfiguration *configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
 	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 	
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:resourceURL];
-	request.HTTPMethod = @"POST";
-	
-	NSError *serializationError = nil;
-	NSData *data = [NSJSONSerialization dataWithJSONObject:parameters options:kNilOptions error:&serializationError];
-	
-	if (serializationError == nil) {
-		return [session uploadTaskWithRequest:request fromData:data completionHandler:completionHandler];
-	} else {
-		return nil;
-	}
+	return [session dataTaskWithRequest:request completionHandler:completionHandler];
 }
 
 
@@ -82,6 +110,7 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 - (void)logout {
 	NSAssert(NSThread.isMainThread, @"-logout should be called on the main thread");
 	self.token = nil;
+	self.currentAccount = nil;
 	
 	[NSNotificationCenter.defaultCenter postNotificationName:BEClientDidLogoutNotification object:nil];
 }
@@ -98,20 +127,22 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	NSString *resource = BEClientAuthenticationResource;
 	
 	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
-		if (error != nil || data == nil) {
-			NSLog(@"error: %@", error);
-			completion(NO);
-		} else {
-			//completion(YES);
-			NSDictionary *result = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-			NSLog(@"result: %@", result);
-			NSLog(@"response: %@", response);
-		}
+		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+		
+		dispatch_async(dispatch_get_main_queue(), ^{
+			if (data != nil && httpResponse.statusCode == 200) {
+				self.token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+				completion(YES);
+			} else {
+				completion(NO);
+			}
+		});
 	};
 	
-	NSURLSessionUploadTask *task = [self POSTRequestWithResource:resource parameters:parameters completionHandler:requestCompletion];
+	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completionHandler:requestCompletion];
 	[task resume];
 }
+
 
 #pragma mark - NSURLSessionDelegate
 
