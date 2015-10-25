@@ -18,6 +18,7 @@ static NSString * const BEClientKeychainProviderIdentifier = @"provider";
 
 // Resources
 static NSString * const BEClientAuthenticationResource = @"get-token/";
+static NSString * const BEClientFormTypesResource = @"formtypes/";
 
 // Typedefs.
 typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSError *error);
@@ -83,7 +84,7 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 #pragma mark - Networking
 
-- (NSURLSessionDataTask *)POSTRequestWithResource:(NSString *)resource parameters:(NSDictionary *)parameters completionHandler:(BERequestCompletion)completionHandler {
+- (NSURLSessionDataTask *)POSTRequestWithResource:(NSString *)resource parameters:(NSDictionary *)parameters completion:(BERequestCompletion)completion {
 	NSURL *resourceURL = [self resourceURLWithBaseProvider:self.currentAccount.provider resource:resource];
 	
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:resourceURL];
@@ -96,7 +97,25 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	NSURLSessionConfiguration *configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
 	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 	
-	return [session dataTaskWithRequest:request completionHandler:completionHandler];
+	return [session dataTaskWithRequest:request completionHandler:completion];
+}
+
+- (NSURLSessionDataTask *)GETRequestWithResource:(NSString *)resource pathParameters:(NSArray<NSString *> *)parameters completion:(BERequestCompletion)completion {
+	NSURLSessionConfiguration *configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
+	
+	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+	
+	NSURL *resourceURL = [self resourceURLWithBaseProvider:self.currentAccount.provider resource:resource];
+	for (NSString *parameter in parameters) {
+		resourceURL = [resourceURL URLByAppendingPathComponent:parameter];
+	}
+	
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:resourceURL];
+	request.allHTTPHeaderFields = @{
+		@"Authorization": [NSString stringWithFormat:@"Token %@", self.token]
+	};
+	
+	return [session dataTaskWithRequest:request completionHandler:completion];
 }
 
 
@@ -131,7 +150,8 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 		
 		dispatch_async(dispatch_get_main_queue(), ^{
 			if (data != nil && httpResponse.statusCode == 200) {
-				self.token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+				NSString *token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+				self.token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""]; // strip quotes
 				completion(YES);
 			} else {
 				completion(NO);
@@ -139,7 +159,27 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 		});
 	};
 	
-	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completionHandler:requestCompletion];
+	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completion:requestCompletion];
+	[task resume];
+}
+
+
+#pragma mark - Forms
+
+- (void)requestFormTypesWithCompletion:(void (^)(NSArray *form, BOOL success))completion {
+	if (self.token == nil) {
+		completion(nil, NO);
+		return;
+	}
+	
+	NSString *resource = BEClientFormTypesResource;
+	
+	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
+		id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+		completion(obj, YES);
+	};
+	
+	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];
 	[task resume];
 }
 

@@ -13,5 +13,6 @@ extern NSString * const BEClientDidLogoutNotification;
 
 - (void)logout;
 - (void)authenticateWithAccount:(BEAccount *)account completion:(void (^)(BOOL success))completion;
+- (void)requestFormTypesWithCompletion:(void (^)(NSArray *form, BOOL success))completion;
 
 @end
