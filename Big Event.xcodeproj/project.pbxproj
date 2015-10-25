@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		006BACEB99AD40B6A505383A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 962FCDB207B7B1E903C2D045 /* libPods.a */; };
 		AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB4F2B151BC1CA99003033B7 /* BENavigationController.m */; settings = {ASSET_TAGS = (); }; };
 		AB76ADE01BC1C5B60000C91B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADDF1BC1C5B60000C91B /* main.m */; };
 		AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */; };
@@ -15,11 +16,17 @@
 		AB76ADEB1BC1C5B60000C91B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AB76ADEA1BC1C5B60000C91B /* Assets.xcassets */; };
 		AB76ADEE1BC1C5B60000C91B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB76ADEC1BC1C5B60000C91B /* LaunchScreen.storyboard */; };
 		ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BB41BC8292600781666 /* BEAccountViewController.m */; settings = {ASSET_TAGS = (); }; };
-		ABBA0BC21BC8661900781666 /* BEAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC11BC8661900781666 /* BEAccountController.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BC21BC8661900781666 /* BEClientController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC11BC8661900781666 /* BEClientController.m */; settings = {ASSET_TAGS = (); }; };
 		ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC41BC8662900781666 /* BEAccount.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BCA1BCC1A6A00781666 /* BEFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BC91BCC1A6A00781666 /* BEFormViewController.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BCE1BCC1DB500781666 /* BEClient.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BCD1BCC1DB500781666 /* BEClient.m */; settings = {ASSET_TAGS = (); }; };
+		ABBA0BD31BCD81A800781666 /* BEConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBA0BD21BCD81A800781666 /* BEConstants.m */; settings = {ASSET_TAGS = (); }; };
+		ABDDADF51BD862340012BEE3 /* NSDictionary+BEEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = ABDDADF41BD862340012BEE3 /* NSDictionary+BEEncoding.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		05734F9F4CBE0E24B5676833 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		962FCDB207B7B1E903C2D045 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB4F2B141BC1CA99003033B7 /* BENavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BENavigationController.h; sourceTree = "<group>"; };
 		AB4F2B151BC1CA99003033B7 /* BENavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BENavigationController.m; sourceTree = "<group>"; };
 		AB76ADDB1BC1C5B60000C91B /* Big Event.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Big Event.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,10 +41,19 @@
 		AB76ADEF1BC1C5B60000C91B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABBA0BB31BC8292600781666 /* BEAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccountViewController.h; sourceTree = "<group>"; };
 		ABBA0BB41BC8292600781666 /* BEAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccountViewController.m; sourceTree = "<group>"; };
-		ABBA0BC01BC8661900781666 /* BEAccountController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccountController.h; sourceTree = "<group>"; };
-		ABBA0BC11BC8661900781666 /* BEAccountController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccountController.m; sourceTree = "<group>"; };
+		ABBA0BC01BC8661900781666 /* BEClientController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEClientController.h; sourceTree = "<group>"; };
+		ABBA0BC11BC8661900781666 /* BEClientController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEClientController.m; sourceTree = "<group>"; };
 		ABBA0BC31BC8662900781666 /* BEAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEAccount.h; sourceTree = "<group>"; };
 		ABBA0BC41BC8662900781666 /* BEAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEAccount.m; sourceTree = "<group>"; };
+		ABBA0BC81BCC1A6A00781666 /* BEFormViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEFormViewController.h; sourceTree = "<group>"; };
+		ABBA0BC91BCC1A6A00781666 /* BEFormViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEFormViewController.m; sourceTree = "<group>"; };
+		ABBA0BCC1BCC1DB500781666 /* BEClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEClient.h; sourceTree = "<group>"; };
+		ABBA0BCD1BCC1DB500781666 /* BEClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEClient.m; sourceTree = "<group>"; };
+		ABBA0BD11BCD81A800781666 /* BEConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEConstants.h; sourceTree = "<group>"; };
+		ABBA0BD21BCD81A800781666 /* BEConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEConstants.m; sourceTree = "<group>"; };
+		ABDDADF31BD862340012BEE3 /* NSDictionary+BEEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+BEEncoding.h"; sourceTree = "<group>"; };
+		ABDDADF41BD862340012BEE3 /* NSDictionary+BEEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+BEEncoding.m"; sourceTree = "<group>"; };
+		E551F6C108B3CAE8451BD60A /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,17 +61,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				006BACEB99AD40B6A505383A /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1A59F3BF3A218B10B7B4E321 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				05734F9F4CBE0E24B5676833 /* Pods.debug.xcconfig */,
+				E551F6C108B3CAE8451BD60A /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		AB76ADD21BC1C5B60000C91B = {
 			isa = PBXGroup;
 			children = (
 				AB76ADDD1BC1C5B60000C91B /* Big Event */,
 				AB76ADDC1BC1C5B60000C91B /* Products */,
+				1A59F3BF3A218B10B7B4E321 /* Pods */,
+				BAC65151BC9966C361447E56 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -73,8 +101,11 @@
 				AB76ADE71BC1C5B60000C91B /* Main.storyboard */,
 				AB76ADE11BC1C5B60000C91B /* BEAppDelegate.h */,
 				AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */,
+				ABBA0BCF1BCD812800781666 /* Constants */,
 				ABBA0BC61BC8663D00781666 /* View Controllers */,
 				ABBA0BC71BC8665300781666 /* Models */,
+				ABBA0BCB1BCC1D8F00781666 /* Networking */,
+				ABDDADEF1BD861F70012BEE3 /* Categories */,
 				AB76ADDE1BC1C5B60000C91B /* Supporting Files */,
 			);
 			path = "Big Event";
@@ -100,6 +131,8 @@
 				AB76ADE51BC1C5B60000C91B /* BERootViewController.m */,
 				ABBA0BB31BC8292600781666 /* BEAccountViewController.h */,
 				ABBA0BB41BC8292600781666 /* BEAccountViewController.m */,
+				ABBA0BC81BCC1A6A00781666 /* BEFormViewController.h */,
+				ABBA0BC91BCC1A6A00781666 /* BEFormViewController.m */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -109,10 +142,45 @@
 			children = (
 				ABBA0BC31BC8662900781666 /* BEAccount.h */,
 				ABBA0BC41BC8662900781666 /* BEAccount.m */,
-				ABBA0BC01BC8661900781666 /* BEAccountController.h */,
-				ABBA0BC11BC8661900781666 /* BEAccountController.m */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		ABBA0BCB1BCC1D8F00781666 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				ABBA0BC01BC8661900781666 /* BEClientController.h */,
+				ABBA0BC11BC8661900781666 /* BEClientController.m */,
+				ABBA0BCC1BCC1DB500781666 /* BEClient.h */,
+				ABBA0BCD1BCC1DB500781666 /* BEClient.m */,
+			);
+			name = Networking;
+			sourceTree = "<group>";
+		};
+		ABBA0BCF1BCD812800781666 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				ABBA0BD11BCD81A800781666 /* BEConstants.h */,
+				ABBA0BD21BCD81A800781666 /* BEConstants.m */,
+			);
+			name = Constants;
+			sourceTree = "<group>";
+		};
+		ABDDADEF1BD861F70012BEE3 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				ABDDADF31BD862340012BEE3 /* NSDictionary+BEEncoding.h */,
+				ABDDADF41BD862340012BEE3 /* NSDictionary+BEEncoding.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		BAC65151BC9966C361447E56 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				962FCDB207B7B1E903C2D045 /* libPods.a */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -122,9 +190,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = AB76ADF21BC1C5B60000C91B /* Build configuration list for PBXNativeTarget "Big Event" */;
 			buildPhases = (
+				FFBC0E3EBFE8BB9236C38E23 /* Check Pods Manifest.lock */,
 				AB76ADD71BC1C5B60000C91B /* Sources */,
 				AB76ADD81BC1C5B60000C91B /* Frameworks */,
 				AB76ADD91BC1C5B60000C91B /* Resources */,
+				0884CD1E0C1419D4F52833AC /* Copy Pods Resources */,
+				45BA86911319FE3852A5F856 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -180,6 +251,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0884CD1E0C1419D4F52833AC /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		45BA86911319FE3852A5F856 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FFBC0E3EBFE8BB9236C38E23 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		AB76ADD71BC1C5B60000C91B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -187,10 +306,14 @@
 			files = (
 				ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */,
 				AB76ADE61BC1C5B60000C91B /* BERootViewController.m in Sources */,
-				ABBA0BC21BC8661900781666 /* BEAccountController.m in Sources */,
+				ABBA0BC21BC8661900781666 /* BEClientController.m in Sources */,
+				ABDDADF51BD862340012BEE3 /* NSDictionary+BEEncoding.m in Sources */,
+				ABBA0BCA1BCC1A6A00781666 /* BEFormViewController.m in Sources */,
+				ABBA0BCE1BCC1DB500781666 /* BEClient.m in Sources */,
 				AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */,
 				AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */,
 				ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */,
+				ABBA0BD31BCD81A800781666 /* BEConstants.m in Sources */,
 				AB76ADE01BC1C5B60000C91B /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -301,6 +424,7 @@
 		};
 		AB76ADF31BC1C5B60000C91B /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05734F9F4CBE0E24B5676833 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Big Event/Info.plist";
@@ -312,6 +436,7 @@
 		};
 		AB76ADF41BC1C5B60000C91B /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E551F6C108B3CAE8451BD60A /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "Big Event/Info.plist";

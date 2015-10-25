@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15A282a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="iDO-3W-2bx">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="iDO-3W-2bx">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -108,6 +108,9 @@
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="textFieldDidChange:" destination="YQ8-xy-Ghz" eventType="editingChanged" id="NXh-6H-1KQ"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <animations/>
@@ -146,6 +149,9 @@
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                                    <connections>
+                                                        <action selector="textFieldDidChange:" destination="YQ8-xy-Ghz" eventType="editingChanged" id="PBq-tU-XGl"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <animations/>
@@ -162,12 +168,53 @@
                                         </tableViewCellContentView>
                                         <animations/>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Bbe-2x-Vla">
+                                        <rect key="frame" x="0.0" y="187" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bbe-2x-Vla" id="UlJ-Fh-0M5">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="provider" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mUs-Uy-rKX">
+                                                    <rect key="frame" x="8" y="8" width="80" height="27.5"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="80" id="ZTU-1z-bNs"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="NmQ-8u-Kf6">
+                                                    <rect key="frame" x="96" y="8" width="488" height="27.5"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <action selector="textFieldDidChange:" destination="YQ8-xy-Ghz" eventType="editingChanged" id="xyc-X9-8YC"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <animations/>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="NmQ-8u-Kf6" secondAttribute="trailing" constant="8" id="7I1-8P-Q74"/>
+                                                <constraint firstItem="NmQ-8u-Kf6" firstAttribute="leading" secondItem="mUs-Uy-rKX" secondAttribute="trailing" constant="8" symbolic="YES" id="7mW-IQ-urP"/>
+                                                <constraint firstItem="mUs-Uy-rKX" firstAttribute="leading" secondItem="UlJ-Fh-0M5" secondAttribute="leadingMargin" id="Oqr-fE-YsA"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="mUs-Uy-rKX" secondAttribute="bottom" id="Qp6-4P-wAf"/>
+                                                <constraint firstItem="NmQ-8u-Kf6" firstAttribute="top" secondItem="UlJ-Fh-0M5" secondAttribute="topMargin" id="hVv-Xh-fYb"/>
+                                                <constraint firstItem="NmQ-8u-Kf6" firstAttribute="leading" secondItem="mUs-Uy-rKX" secondAttribute="trailing" constant="8" symbolic="YES" id="r9h-Kg-zju"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="NmQ-8u-Kf6" secondAttribute="bottom" id="wgc-m8-7e1"/>
+                                                <constraint firstItem="mUs-Uy-rKX" firstAttribute="top" secondItem="UlJ-Fh-0M5" secondAttribute="topMargin" id="zdq-KN-fxv"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection id="nxk-9p-p1i">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="oKM-1L-d5Q">
-                                        <rect key="frame" x="0.0" y="223" width="600" height="44"/>
+                                        <rect key="frame" x="0.0" y="267" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oKM-1L-d5Q" id="PXe-nD-f05">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
@@ -203,18 +250,21 @@
                     <navigationItem key="navigationItem" id="nh2-Th-Mjv">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="goi-i5-8o6">
                             <connections>
-                                <segue destination="H2k-kW-MSa" kind="unwind" identifier="cancel" unwindAction="accountDone:" id="8DJ-ZA-FA9"/>
+                                <segue destination="H2k-kW-MSa" kind="unwind" identifier="account-cancel" unwindAction="accountDone:" id="8DJ-ZA-FA9"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="ZyN-hy-F3x">
                             <connections>
-                                <segue destination="H2k-kW-MSa" kind="unwind" identifier="done" unwindAction="accountDone:" id="fwp-tG-1bz"/>
+                                <segue destination="H2k-kW-MSa" kind="unwind" identifier="account-done" unwindAction="accountDone:" id="fwp-tG-1bz"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="authenticationActionButton" destination="QnV-FS-8Hg" id="ftp-cS-tU1"/>
+                        <outlet property="cancelButton" destination="goi-i5-8o6" id="Rbh-vb-KwS"/>
+                        <outlet property="doneButton" destination="ZyN-hy-F3x" id="zgt-go-gRZ"/>
                         <outlet property="passwordField" destination="56v-eh-RqN" id="w64-oK-YTQ"/>
+                        <outlet property="providerField" destination="NmQ-8u-Kf6" id="HDp-KM-0fc"/>
                         <outlet property="usernameField" destination="6VC-PZ-icg" id="M3i-1V-b1D"/>
                     </connections>
                 </tableViewController>
