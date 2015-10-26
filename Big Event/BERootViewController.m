@@ -7,9 +7,13 @@
 
 #import <SVProgressHUD/SVProgressHUD.h>
 
+
 @interface BERootViewController ()
 
+@property (nonatomic, strong) BEJobStubPage *currentJobStubsPage;
+
 @end
+
 
 @implementation BERootViewController
 
@@ -30,6 +34,8 @@
 	// If not authenticated, present the accounts modal.
 	if (!BEClientController.sharedController.client.authenticated) {
 		[self performSegueWithIdentifier:BEAccountSegueIdentifier sender:nil];
+	} else {
+		[self reloadForms];
 	}
 }
 
@@ -43,7 +49,9 @@
 #pragma mark - Account Segue
 
 - (IBAction)accountDone:(UIStoryboardSegue *)segue {
-	NSLog(@"%s",__PRETTY_FUNCTION__);
+	NSAssert(BEClientController.sharedController.client.authenticated, @"accounts should not be dismissable unless authenticated");
+	
+	[self reloadForms];
 }
 
 
@@ -55,25 +63,41 @@
 }
 
 - (void)clientDidLogout:(NSNotification *)note {
-	// remove forms
-	NSLog(@"%s",__PRETTY_FUNCTION__);
+	[self.tableView reloadData];
 }
 
+
+#pragma mark - Client
+
+- (void)reloadForms {
+	BEClient *client = BEClientController.sharedController.client;
+	[client requestJobStubsPageWithState:BEJobStubStateSurveyNeeded completion:^(BEJobStubPage *page, BOOL success) {
+		if (!success) {
+			[SVProgressHUD showErrorWithStatus:@"Could not load forms"];
+			return;
+		}
+		
+		self.currentJobStubsPage = page;
+		[self.tableView reloadData];
+	}];
+}
 
 #pragma mark - UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	// TODO: different sections for form state?
 	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return 3;
+	return self.currentJobStubsPage.stubs.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
 	
-	cell.textLabel.text = @"test";
+	BEJobStub *stub = self.currentJobStubsPage.stubs[indexPath.row];
+	cell.textLabel.text = stub.location.address1;
 	
 	return cell;
 }

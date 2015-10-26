@@ -19,6 +19,7 @@ static NSString * const BEClientKeychainProviderIdentifier = @"provider";
 // Resources
 static NSString * const BEClientAuthenticationResource = @"get-token/";
 static NSString * const BEClientFormTypesResource = @"formtypes/";
+static NSString * const BEClientJobStubsResource = @"jobstubs/";
 
 // Typedefs.
 typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSError *error);
@@ -97,7 +98,11 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	NSURLSessionConfiguration *configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
 	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 	
-	return [session dataTaskWithRequest:request completionHandler:completion];
+	return [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completion(data, response, error);
+		});
+	}];
 }
 
 - (NSURLSessionDataTask *)GETRequestWithResource:(NSString *)resource pathParameters:(NSArray<NSString *> *)parameters completion:(BERequestCompletion)completion {
@@ -115,7 +120,11 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 		@"Authorization": [NSString stringWithFormat:@"Token %@", self.token]
 	};
 	
-	return [session dataTaskWithRequest:request completionHandler:completion];
+	return [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completion(data, response, error);
+		});
+	}];
 }
 
 
@@ -148,15 +157,13 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
 		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			if (data != nil && httpResponse.statusCode == 200) {
-				NSString *token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-				self.token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""]; // strip quotes
-				completion(YES);
-			} else {
-				completion(NO);
-			}
-		});
+		if (data != nil && httpResponse.statusCode == 200) {
+			NSString *token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+			self.token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""]; // strip quotes
+			completion(YES);
+		} else {
+			completion(NO);
+		}
 	};
 	
 	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completion:requestCompletion];
@@ -177,6 +184,27 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
 		id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 		completion(obj, YES);
+	};
+	
+	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];
+	[task resume];
+}
+
+
+#pragma mark - Jobs
+
+- (void)requestJobStubsPageWithState:(BEJobStubState)state completion:(void (^)(BEJobStubPage *, BOOL))completion {
+	if (self.token == nil) {
+		completion(nil, NO);
+		return;
+	}
+	
+	NSString *resource = BEClientJobStubsResource;
+	
+	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
+		NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+		BEJobStubPage *page = [MTLJSONAdapter modelOfClass:BEJobStubPage.class fromJSONDictionary:obj error:&error];
+		completion(page, YES);
 	};
 	
 	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];

@@ -2,7 +2,9 @@
 //  Created by Jonathan Willing
 
 #import <Foundation/Foundation.h>
+
 #import "BEAccount.h"
+#import "BEJobStubPage.h"
 
 extern NSString * const BEClientDidLogoutNotification;
 
@@ -14,5 +16,6 @@ extern NSString * const BEClientDidLogoutNotification;
 - (void)logout;
 - (void)authenticateWithAccount:(BEAccount *)account completion:(void (^)(BOOL success))completion;
 - (void)requestFormTypesWithCompletion:(void (^)(NSArray *form, BOOL success))completion;
+- (void)requestJobStubsPageWithState:(BEJobStubState)state completion:(void (^)(BEJobStubPage *page, BOOL success))completion;
 
 @end
