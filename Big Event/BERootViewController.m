@@ -2,13 +2,14 @@
 //  Created by Jonathan Willing
 
 #import "BERootViewController.h"
+#import "BEFormViewController.h"
 #import "BEClientController.h"
 #import "BEConstants.h"
 
 #import <SVProgressHUD/SVProgressHUD.h>
 
 
-@interface BERootViewController ()
+@interface BERootViewController () <BEFormDelegate>
 
 @property (nonatomic, strong) BEJobStubPage *currentJobStubsPage;
 
@@ -23,10 +24,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	// Configure the shared progress HUD.
 	[self configureHUD];
-	
-	[self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
 	[self registerNotifications];
 }
 
@@ -100,6 +98,22 @@
 	cell.textLabel.text = stub.location.address1;
 	
 	return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	return @"Survey Needed";
+}
+
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+	if ([segue.identifier isEqualToString:BEFormShowSegueIdentifier]) {
+		BEJobStub *stub = self.currentJobStubsPage.stubs[self.tableView.indexPathForSelectedRow.row];
+		BEFormViewController *formViewController = segue.destinationViewController;
+		formViewController.requestID = stub.requestID;
+		formViewController.delegate = self;
+	}
 }
 
 @end

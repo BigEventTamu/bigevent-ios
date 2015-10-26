@@ -12,6 +12,7 @@
 		AB53A8291BDED53200272C0D /* BEJobStub.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8281BDED53200272C0D /* BEJobStub.m */; };
 		AB53A82C1BDED8FE00272C0D /* BELocation.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A82B1BDED8FE00272C0D /* BELocation.m */; };
 		AB53A82F1BDEDCE100272C0D /* BEJobStubPage.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A82E1BDEDCE100272C0D /* BEJobStubPage.m */; };
+		AB53A8321BDEE9AF00272C0D /* BEFormTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8311BDEE9AF00272C0D /* BEFormTypeViewController.m */; };
 		AB76ADE01BC1C5B60000C91B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADDF1BC1C5B60000C91B /* main.m */; };
 		AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */; };
 		AB76ADE61BC1C5B60000C91B /* BERootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE51BC1C5B60000C91B /* BERootViewController.m */; };
@@ -38,6 +39,8 @@
 		AB53A82B1BDED8FE00272C0D /* BELocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BELocation.m; sourceTree = "<group>"; };
 		AB53A82D1BDEDCE100272C0D /* BEJobStubPage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEJobStubPage.h; sourceTree = "<group>"; };
 		AB53A82E1BDEDCE100272C0D /* BEJobStubPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEJobStubPage.m; sourceTree = "<group>"; };
+		AB53A8301BDEE9AF00272C0D /* BEFormTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEFormTypeViewController.h; sourceTree = "<group>"; };
+		AB53A8311BDEE9AF00272C0D /* BEFormTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEFormTypeViewController.m; sourceTree = "<group>"; };
 		AB76ADDB1BC1C5B60000C91B /* Big Event.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Big Event.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB76ADDF1BC1C5B60000C91B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AB76ADE11BC1C5B60000C91B /* BEAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BEAppDelegate.h; sourceTree = "<group>"; };
@@ -140,6 +143,8 @@
 				AB76ADE51BC1C5B60000C91B /* BERootViewController.m */,
 				ABBA0BB31BC8292600781666 /* BEAccountViewController.h */,
 				ABBA0BB41BC8292600781666 /* BEAccountViewController.m */,
+				AB53A8301BDEE9AF00272C0D /* BEFormTypeViewController.h */,
+				AB53A8311BDEE9AF00272C0D /* BEFormTypeViewController.m */,
 				ABBA0BC81BCC1A6A00781666 /* BEFormViewController.h */,
 				ABBA0BC91BCC1A6A00781666 /* BEFormViewController.m */,
 			);
@@ -328,6 +333,7 @@
 				ABBA0BCA1BCC1A6A00781666 /* BEFormViewController.m in Sources */,
 				ABBA0BCE1BCC1DB500781666 /* BEClient.m in Sources */,
 				AB53A82C1BDED8FE00272C0D /* BELocation.m in Sources */,
+				AB53A8321BDEE9AF00272C0D /* BEFormTypeViewController.m in Sources */,
 				AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */,
 				AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */,
 				ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */,
