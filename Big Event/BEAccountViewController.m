@@ -16,7 +16,6 @@
 @property (weak) IBOutlet UITextField *passwordField;
 @property (weak) IBOutlet UITextField *providerField;
 @property (weak) IBOutlet UIBarButtonItem *doneButton;
-@property (weak) IBOutlet UIBarButtonItem *cancelButton;
 @property (weak) IBOutlet UIButton *authenticationActionButton;
 
 @end
@@ -140,10 +139,6 @@
 	
 	self.doneButton.enabled = canAuthenticate && self.authenticationEnabled;
 	self.authenticationActionButton.enabled = self.authenticationEnabled;
-	
-	// We don't want to be able to cancel out if we aren't authenticated.
-	BOOL authenticationRequired = !self.isAuthenticated;
-	self.cancelButton.enabled = !authenticationRequired;
 	
 	// If already authenticated, don't allow editing, and update the text color.
 	self.usernameField.enabled = !self.isAuthenticated;

@@ -15,6 +15,7 @@ static NSString * const BEClientKeychainTokenIdentifier = @"authentication-token
 static NSString * const BEClientKeychainUsernameIdentifier = @"username";
 static NSString * const BEClientKeychainPasswordIdentifier = @"password";
 static NSString * const BEClientKeychainProviderIdentifier = @"provider";
+static NSString * const BEClientKeychainFormTypeIdentifier = @"form-type";
 
 // Resources
 static NSString * const BEClientAuthenticationResource = @"get-token/";
@@ -68,6 +69,14 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	}
 	
 	return _currentAccount;
+}
+
+- (void)setCurrentFormTypeID:(NSNumber *)currentFormTypeID {
+	self.keychain[BEClientKeychainFormTypeIdentifier] = currentFormTypeID.stringValue;
+}
+
+- (NSNumber *)currentFormTypeID {
+	return @(self.keychain[BEClientKeychainFormTypeIdentifier].integerValue);
 }
 
 
@@ -173,7 +182,7 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 #pragma mark - Forms
 
-- (void)requestFormTypesWithCompletion:(void (^)(NSArray *form, BOOL success))completion {
+- (void)requestFormTypesWithCompletion:(void (^)(NSArray<BEFormType *> *, BOOL))completion {
 	if (self.token == nil) {
 		completion(nil, NO);
 		return;
@@ -182,8 +191,13 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	NSString *resource = BEClientFormTypesResource;
 	
 	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
-		id obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-		completion(obj, YES);
+		NSArray *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+		if (obj == nil) {
+			completion(nil, NO);
+		} else {
+			NSArray *objects = [MTLJSONAdapter modelsOfClass:BEFormType.class fromJSONArray:obj error:&error];
+			completion(objects, YES);
+		}
 	};
 	
 	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];

@@ -7,6 +7,8 @@ NSString * const BEAccountDefaultProvider = @"https://steven.tamu.edu/be/json";
 
 NSString * const BEAccountSegueIdentifier = @"account";
 NSString * const BEAccountDoneSegueIdentifier = @"account-done";
-NSString * const BEAccountCancelSegueIdentifier = @"account-cancel";
 
 NSString * const BEFormShowSegueIdentifier = @"form-show";
+
+NSString * const BEFormTypePopSegueIdentifier = @"form-type-pop";
+NSString * const BEFormTypeShowSegueIdentifier = @"form-type-show";

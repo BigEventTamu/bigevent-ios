@@ -13,6 +13,9 @@
 		AB53A82C1BDED8FE00272C0D /* BELocation.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A82B1BDED8FE00272C0D /* BELocation.m */; };
 		AB53A82F1BDEDCE100272C0D /* BEJobStubPage.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A82E1BDEDCE100272C0D /* BEJobStubPage.m */; };
 		AB53A8321BDEE9AF00272C0D /* BEFormTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8311BDEE9AF00272C0D /* BEFormTypeViewController.m */; };
+		AB53A8381BDFF30100272C0D /* BEFormType.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8371BDFF30100272C0D /* BEFormType.m */; };
+		AB53A83C1BE1312C00272C0D /* BEDismissSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A83B1BE1312C00272C0D /* BEDismissSegue.m */; };
+		AB53A83F1BE1336700272C0D /* BEPopSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A83E1BE1336700272C0D /* BEPopSegue.m */; };
 		AB76ADE01BC1C5B60000C91B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADDF1BC1C5B60000C91B /* main.m */; };
 		AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */; };
 		AB76ADE61BC1C5B60000C91B /* BERootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE51BC1C5B60000C91B /* BERootViewController.m */; };
@@ -41,6 +44,12 @@
 		AB53A82E1BDEDCE100272C0D /* BEJobStubPage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEJobStubPage.m; sourceTree = "<group>"; };
 		AB53A8301BDEE9AF00272C0D /* BEFormTypeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEFormTypeViewController.h; sourceTree = "<group>"; };
 		AB53A8311BDEE9AF00272C0D /* BEFormTypeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEFormTypeViewController.m; sourceTree = "<group>"; };
+		AB53A8361BDFF30100272C0D /* BEFormType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEFormType.h; sourceTree = "<group>"; };
+		AB53A8371BDFF30100272C0D /* BEFormType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEFormType.m; sourceTree = "<group>"; };
+		AB53A83A1BE1312C00272C0D /* BEDismissSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEDismissSegue.h; sourceTree = "<group>"; };
+		AB53A83B1BE1312C00272C0D /* BEDismissSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEDismissSegue.m; sourceTree = "<group>"; };
+		AB53A83D1BE1336700272C0D /* BEPopSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEPopSegue.h; sourceTree = "<group>"; };
+		AB53A83E1BE1336700272C0D /* BEPopSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEPopSegue.m; sourceTree = "<group>"; };
 		AB76ADDB1BC1C5B60000C91B /* Big Event.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Big Event.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB76ADDF1BC1C5B60000C91B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AB76ADE11BC1C5B60000C91B /* BEAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BEAppDelegate.h; sourceTree = "<group>"; };
@@ -89,6 +98,48 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		AB53A8331BDFF2D100272C0D /* Jobs */ = {
+			isa = PBXGroup;
+			children = (
+				AB53A82D1BDEDCE100272C0D /* BEJobStubPage.h */,
+				AB53A82E1BDEDCE100272C0D /* BEJobStubPage.m */,
+				AB53A8271BDED53200272C0D /* BEJobStub.h */,
+				AB53A8281BDED53200272C0D /* BEJobStub.m */,
+				AB53A82A1BDED8FE00272C0D /* BELocation.h */,
+				AB53A82B1BDED8FE00272C0D /* BELocation.m */,
+			);
+			name = Jobs;
+			sourceTree = "<group>";
+		};
+		AB53A8341BDFF2DC00272C0D /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				ABBA0BC31BC8662900781666 /* BEAccount.h */,
+				ABBA0BC41BC8662900781666 /* BEAccount.m */,
+			);
+			name = Account;
+			sourceTree = "<group>";
+		};
+		AB53A8351BDFF2E800272C0D /* Form */ = {
+			isa = PBXGroup;
+			children = (
+				AB53A8361BDFF30100272C0D /* BEFormType.h */,
+				AB53A8371BDFF30100272C0D /* BEFormType.m */,
+			);
+			name = Form;
+			sourceTree = "<group>";
+		};
+		AB53A8391BE130D900272C0D /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				AB53A83A1BE1312C00272C0D /* BEDismissSegue.h */,
+				AB53A83B1BE1312C00272C0D /* BEDismissSegue.m */,
+				AB53A83D1BE1336700272C0D /* BEPopSegue.h */,
+				AB53A83E1BE1336700272C0D /* BEPopSegue.m */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
 		AB76ADD21BC1C5B60000C91B = {
 			isa = PBXGroup;
 			children = (
@@ -118,6 +169,7 @@
 				ABBA0BC71BC8665300781666 /* Models */,
 				ABBA0BCB1BCC1D8F00781666 /* Networking */,
 				ABDDADEF1BD861F70012BEE3 /* Categories */,
+				AB53A8391BE130D900272C0D /* Utilities */,
 				AB76ADDE1BC1C5B60000C91B /* Supporting Files */,
 			);
 			path = "Big Event";
@@ -154,14 +206,9 @@
 		ABBA0BC71BC8665300781666 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				ABBA0BC31BC8662900781666 /* BEAccount.h */,
-				ABBA0BC41BC8662900781666 /* BEAccount.m */,
-				AB53A82D1BDEDCE100272C0D /* BEJobStubPage.h */,
-				AB53A82E1BDEDCE100272C0D /* BEJobStubPage.m */,
-				AB53A8271BDED53200272C0D /* BEJobStub.h */,
-				AB53A8281BDED53200272C0D /* BEJobStub.m */,
-				AB53A82A1BDED8FE00272C0D /* BELocation.h */,
-				AB53A82B1BDED8FE00272C0D /* BELocation.m */,
+				AB53A8341BDFF2DC00272C0D /* Account */,
+				AB53A8331BDFF2D100272C0D /* Jobs */,
+				AB53A8351BDFF2E800272C0D /* Form */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -328,6 +375,8 @@
 				AB53A82F1BDEDCE100272C0D /* BEJobStubPage.m in Sources */,
 				ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */,
 				AB76ADE61BC1C5B60000C91B /* BERootViewController.m in Sources */,
+				AB53A8381BDFF30100272C0D /* BEFormType.m in Sources */,
+				AB53A83C1BE1312C00272C0D /* BEDismissSegue.m in Sources */,
 				ABBA0BC21BC8661900781666 /* BEClientController.m in Sources */,
 				ABDDADF51BD862340012BEE3 /* NSDictionary+BEEncoding.m in Sources */,
 				ABBA0BCA1BCC1A6A00781666 /* BEFormViewController.m in Sources */,
@@ -338,6 +387,7 @@
 				AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */,
 				ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */,
 				ABBA0BD31BCD81A800781666 /* BEConstants.m in Sources */,
+				AB53A83F1BE1336700272C0D /* BEPopSegue.m in Sources */,
 				AB76ADE01BC1C5B60000C91B /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
