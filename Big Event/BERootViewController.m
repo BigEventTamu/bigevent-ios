@@ -110,9 +110,10 @@
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
 	if ([segue.identifier isEqualToString:BEFormShowSegueIdentifier]) {
 		BEJobStub *stub = self.currentJobStubsPage.stubs[self.tableView.indexPathForSelectedRow.row];
+		
 		BEFormViewController *formViewController = segue.destinationViewController;
-		formViewController.requestID = stub.requestID;
 		formViewController.delegate = self;
+		formViewController.stub = stub;
 	}
 }
 

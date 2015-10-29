@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "XLFormViewController.h"
+#import "BEJobStub.h"
 
 @protocol BEFormDelegate <NSObject>
 
@@ -9,7 +10,7 @@
 
 @interface BEFormViewController : XLFormViewController
 
-@property (copy) NSString *requestID;
+@property (strong) BEJobStub *stub;
 @property (weak) id<BEFormDelegate> delegate;
 
 @end

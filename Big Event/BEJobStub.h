@@ -17,8 +17,6 @@ typedef NS_ENUM(NSInteger, BEJobStubState) {
 @property (readonly) BEJobStubState state;
 @property (readonly) BELocation *location;
 @property (readonly, copy) NSString *detail;
-
-#warning This should be an integer. Update API for fix.
 @property (readonly) NSString *requestID;
 
 + (NSValueTransformer *)stateJSONTransformer;
