@@ -2,6 +2,9 @@
 //  Created by Jonathan Willing
 
 #import "BEFormViewController.h"
+#import "XLFormRowDescriptor+BEAdditions.h"
+#import "BEClientController.h"
+#import "BEConstants.h"
 
 @interface BEFormViewController ()
 
@@ -9,5 +12,28 @@
 
 
 @implementation BEFormViewController
+
+- (void)setStub:(BEJobStub *)stub {
+	_stub = stub;
+	
+	BEClient *client = BEClientController.sharedController.client;
+	[client requestFormWithFormType:client.currentFormTypeID completion:^(BEForm *form) {
+		NSLog(@"%@", form);
+		[self generateFormWithForm:form];
+	}];
+}
+
+- (void)generateFormWithForm:(BEForm *)formData {
+	XLFormDescriptor *form = [XLFormDescriptor formDescriptorWithTitle:formData.name];
+	XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
+	
+	for (BEField *field in formData.fields) {
+		XLFormRowDescriptor *row = [XLFormRowDescriptor be_formDescriptorWithField:field];
+		[section addFormRow:row];
+	}
+	
+	[form addFormSection:section];
+	self.form = form;
+}
 
 @end

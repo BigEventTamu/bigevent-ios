@@ -2,14 +2,19 @@
 //  Created by Jonathan Willing
 
 #import "BERootViewController.h"
+#import "BEFormViewController.h"
 #import "BEClientController.h"
 #import "BEConstants.h"
 
 #import <SVProgressHUD/SVProgressHUD.h>
 
-@interface BERootViewController ()
+
+@interface BERootViewController () <BEFormDelegate>
+
+@property (nonatomic, strong) BEJobStubPage *currentJobStubsPage;
 
 @end
+
 
 @implementation BERootViewController
 
@@ -19,17 +24,14 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
-	// Configure the shared progress HUD.
 	[self configureHUD];
-	
-	[self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"cell"];
 	[self registerNotifications];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
+	
 	// If not authenticated, present the accounts modal.
 	if (!BEClientController.sharedController.client.authenticated) {
 		[self performSegueWithIdentifier:BEAccountSegueIdentifier sender:nil];
+	} else {
+		[self reloadForms];
 	}
 }
 
@@ -43,7 +45,9 @@
 #pragma mark - Account Segue
 
 - (IBAction)accountDone:(UIStoryboardSegue *)segue {
-	NSLog(@"%s",__PRETTY_FUNCTION__);
+	NSAssert(BEClientController.sharedController.client.authenticated, @"accounts should not be dismissable unless authenticated");
+	
+	[self reloadForms];
 }
 
 
@@ -55,27 +59,60 @@
 }
 
 - (void)clientDidLogout:(NSNotification *)note {
-	// remove forms
-	NSLog(@"%s",__PRETTY_FUNCTION__);
+	[self.tableView reloadData];
 }
 
+
+#pragma mark - Client
+
+- (void)reloadForms {
+	BEClient *client = BEClientController.sharedController.client;
+	[client requestJobStubsPageWithState:BEJobStubStateSurveyNeeded completion:^(BEJobStubPage *page) {
+		if (page == nil) {
+			[SVProgressHUD showErrorWithStatus:@"Could not load forms"];
+			return;
+		}
+		
+		self.currentJobStubsPage = page;
+		[self.tableView reloadData];
+	}];
+}
 
 #pragma mark - UITableViewDelegate
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+	// TODO: different sections for form state?
 	return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-	return 3;
+	return self.currentJobStubsPage.stubs.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
 	
-	cell.textLabel.text = @"test";
+	BEJobStub *stub = self.currentJobStubsPage.stubs[indexPath.row];
+	cell.textLabel.text = stub.location.address1;
 	
 	return cell;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	return @"Survey Needed";
+}
+
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+	if ([segue.identifier isEqualToString:BEFormShowSegueIdentifier]) {
+		BEJobStub *stub = self.currentJobStubsPage.stubs[self.tableView.indexPathForSelectedRow.row];
+		
+		BEFormViewController *formViewController = segue.destinationViewController;
+		formViewController.delegate = self;
+		formViewController.stub = stub;
+	}
 }
 
 @end

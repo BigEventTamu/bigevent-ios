@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BEClient.h"
+#import "NSURL+BEAdditions.h"
 #import "NSDictionary+BEEncoding.h"
 
 #import <UICKeyChainStore/UICKeyChainStore.h>
@@ -15,9 +16,13 @@ static NSString * const BEClientKeychainTokenIdentifier = @"authentication-token
 static NSString * const BEClientKeychainUsernameIdentifier = @"username";
 static NSString * const BEClientKeychainPasswordIdentifier = @"password";
 static NSString * const BEClientKeychainProviderIdentifier = @"provider";
+static NSString * const BEClientKeychainFormTypeIdentifier = @"form-type";
 
 // Resources
 static NSString * const BEClientAuthenticationResource = @"get-token/";
+static NSString * const BEClientFormTypesResource = @"formtypes/";
+static NSString * const BEClientJobStubsResource = @"jobstubs/";
+static NSString * const BEClientFormResource = @"form/";
 
 // Typedefs.
 typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSError *error);
@@ -54,6 +59,10 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	self.keychain[BEClientKeychainUsernameIdentifier] = currentAccount.username;
 	self.keychain[BEClientKeychainPasswordIdentifier] = currentAccount.password;
 	self.keychain[BEClientKeychainProviderIdentifier] = currentAccount.provider;
+	
+	if (currentAccount == nil) {
+		self.keychain[BEClientKeychainFormTypeIdentifier] = nil;
+	}
 }
 
 - (BEAccount *)currentAccount {
@@ -68,6 +77,14 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	return _currentAccount;
 }
 
+- (void)setCurrentFormTypeID:(NSNumber *)currentFormTypeID {
+	self.keychain[BEClientKeychainFormTypeIdentifier] = currentFormTypeID.stringValue;
+}
+
+- (NSNumber *)currentFormTypeID {
+	return @(self.keychain[BEClientKeychainFormTypeIdentifier].integerValue);
+}
+
 
 #pragma mark - URLs
 
@@ -77,13 +94,14 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 - (NSURL *)resourceURLWithBaseProvider:(NSString *)provider resource:(NSString *)resource {
 	NSURL *baseURL = [NSURL URLWithString:provider];
-	return [baseURL URLByAppendingPathComponent:resource];
+	baseURL = [baseURL URLByAppendingPathComponent:resource];
+	return [baseURL be_URLByAppendingTrailingSlash];
 }
 
 
 #pragma mark - Networking
 
-- (NSURLSessionDataTask *)POSTRequestWithResource:(NSString *)resource parameters:(NSDictionary *)parameters completionHandler:(BERequestCompletion)completionHandler {
+- (NSURLSessionDataTask *)POSTRequestWithResource:(NSString *)resource parameters:(NSDictionary *)parameters completion:(BERequestCompletion)completion {
 	NSURL *resourceURL = [self resourceURLWithBaseProvider:self.currentAccount.provider resource:resource];
 	
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:resourceURL];
@@ -96,7 +114,33 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	NSURLSessionConfiguration *configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
 	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
 	
-	return [session dataTaskWithRequest:request completionHandler:completionHandler];
+	return [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completion(data, response, error);
+		});
+	}];
+}
+
+- (NSURLSessionDataTask *)GETRequestWithResource:(NSString *)resource pathParameters:(NSArray<NSString *> *)parameters completion:(BERequestCompletion)completion {
+	NSURLSessionConfiguration *configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
+	
+	NSURLSession *session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
+	
+	NSURL *resourceURL = [self resourceURLWithBaseProvider:self.currentAccount.provider resource:resource];
+	for (NSString *parameter in parameters) {
+		resourceURL = [resourceURL URLByAppendingPathComponent:parameter];
+	}
+	
+	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:resourceURL];
+	request.allHTTPHeaderFields = @{
+		@"Authorization": [NSString stringWithFormat:@"Token %@", self.token]
+	};
+	
+	return [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+		dispatch_async(dispatch_get_main_queue(), ^{
+			completion(data, response, error);
+		});
+	}];
 }
 
 
@@ -129,17 +173,85 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
 		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
 		
-		dispatch_async(dispatch_get_main_queue(), ^{
-			if (data != nil && httpResponse.statusCode == 200) {
-				self.token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-				completion(YES);
-			} else {
-				completion(NO);
-			}
-		});
+		if (data != nil && httpResponse.statusCode == 200) {
+			NSString *token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+			self.token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""]; // strip quotes
+			completion(YES);
+		} else {
+			completion(NO);
+		}
 	};
 	
-	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completionHandler:requestCompletion];
+	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completion:requestCompletion];
+	[task resume];
+}
+
+
+#pragma mark - Forms
+
+- (void)requestFormTypesWithCompletion:(void (^)(NSArray<BEFormType *> *))completion {
+	if (self.token == nil) {
+		completion(nil);
+		return;
+	}
+	
+	NSString *resource = BEClientFormTypesResource;
+	
+	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
+		NSArray *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+		if (obj == nil) {
+			completion(nil);
+		} else {
+			NSArray *objects = [MTLJSONAdapter modelsOfClass:BEFormType.class fromJSONArray:obj error:&error];
+			completion(objects);
+		}
+	};
+	
+	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];
+	[task resume];
+}
+
+- (void)requestFormWithFormType:(NSNumber *)formTypeID completion:(void (^)(BEForm *))completion {
+	if (self.token == nil) {
+		completion(nil);
+		return;
+	}
+	
+	NSString *resource = BEClientFormResource;
+	resource = [resource stringByAppendingPathComponent:formTypeID.stringValue];
+	
+	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
+		NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+		if (obj == nil) {
+			completion(nil);
+		} else {
+			BEForm *form = [MTLJSONAdapter modelOfClass:BEForm.class fromJSONDictionary:obj error:&error];
+			completion(form);
+		}
+	};
+	
+	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];
+	[task resume];
+}
+
+
+#pragma mark - Jobs
+
+- (void)requestJobStubsPageWithState:(BEJobStubState)state completion:(void (^)(BEJobStubPage *))completion {
+	if (self.token == nil) {
+		completion(nil);
+		return;
+	}
+	
+	NSString *resource = BEClientJobStubsResource;
+	
+	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
+		NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+		BEJobStubPage *page = [MTLJSONAdapter modelOfClass:BEJobStubPage.class fromJSONDictionary:obj error:&error];
+		completion(page);
+	};
+	
+	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];
 	[task resume];
 }
 
