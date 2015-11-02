@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BEFormViewController.h"
+#import "BEClientController.h"
 #import "BEConstants.h"
 
 @interface BEFormViewController ()
@@ -11,9 +12,13 @@
 
 @implementation BEFormViewController
 
-- (void)viewDidLoad {
-	[super viewDidLoad];
+- (void)setStub:(BEJobStub *)stub {
+	_stub = stub;
 	
+	BEClient *client = BEClientController.sharedController.client;
+	[client requestFormWithFormType:client.currentFormTypeID completion:^(BEForm *form) {
+		NSLog(@"%@", form);
+	}];
 }
 
 @end

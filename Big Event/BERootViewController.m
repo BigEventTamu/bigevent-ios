@@ -26,9 +26,7 @@
 	
 	[self configureHUD];
 	[self registerNotifications];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
+	
 	// If not authenticated, present the accounts modal.
 	if (!BEClientController.sharedController.client.authenticated) {
 		[self performSegueWithIdentifier:BEAccountSegueIdentifier sender:nil];
@@ -69,8 +67,8 @@
 
 - (void)reloadForms {
 	BEClient *client = BEClientController.sharedController.client;
-	[client requestJobStubsPageWithState:BEJobStubStateSurveyNeeded completion:^(BEJobStubPage *page, BOOL success) {
-		if (!success) {
+	[client requestJobStubsPageWithState:BEJobStubStateSurveyNeeded completion:^(BEJobStubPage *page) {
+		if (page == nil) {
 			[SVProgressHUD showErrorWithStatus:@"Could not load forms"];
 			return;
 		}

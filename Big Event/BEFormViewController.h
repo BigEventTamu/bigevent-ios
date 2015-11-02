@@ -10,7 +10,7 @@
 
 @interface BEFormViewController : XLFormViewController
 
-@property (strong) BEJobStub *stub;
+@property (nonatomic, strong) BEJobStub *stub;
 @property (weak) id<BEFormDelegate> delegate;
 
 @end

@@ -16,6 +16,8 @@
 		AB53A8381BDFF30100272C0D /* BEFormType.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8371BDFF30100272C0D /* BEFormType.m */; };
 		AB53A83C1BE1312C00272C0D /* BEDismissSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A83B1BE1312C00272C0D /* BEDismissSegue.m */; };
 		AB53A83F1BE1336700272C0D /* BEPopSegue.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A83E1BE1336700272C0D /* BEPopSegue.m */; };
+		AB53A8421BE293FB00272C0D /* BEForm.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8411BE293FB00272C0D /* BEForm.m */; };
+		AB53A8451BE6DF5700272C0D /* NSURL+BEAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8441BE6DF5700272C0D /* NSURL+BEAdditions.m */; };
 		AB76ADE01BC1C5B60000C91B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADDF1BC1C5B60000C91B /* main.m */; };
 		AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */; };
 		AB76ADE61BC1C5B60000C91B /* BERootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE51BC1C5B60000C91B /* BERootViewController.m */; };
@@ -50,6 +52,10 @@
 		AB53A83B1BE1312C00272C0D /* BEDismissSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEDismissSegue.m; sourceTree = "<group>"; };
 		AB53A83D1BE1336700272C0D /* BEPopSegue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEPopSegue.h; sourceTree = "<group>"; };
 		AB53A83E1BE1336700272C0D /* BEPopSegue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEPopSegue.m; sourceTree = "<group>"; };
+		AB53A8401BE293FB00272C0D /* BEForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEForm.h; sourceTree = "<group>"; };
+		AB53A8411BE293FB00272C0D /* BEForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEForm.m; sourceTree = "<group>"; };
+		AB53A8431BE6DF5700272C0D /* NSURL+BEAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+BEAdditions.h"; sourceTree = "<group>"; };
+		AB53A8441BE6DF5700272C0D /* NSURL+BEAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+BEAdditions.m"; sourceTree = "<group>"; };
 		AB76ADDB1BC1C5B60000C91B /* Big Event.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Big Event.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB76ADDF1BC1C5B60000C91B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		AB76ADE11BC1C5B60000C91B /* BEAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BEAppDelegate.h; sourceTree = "<group>"; };
@@ -125,6 +131,8 @@
 			children = (
 				AB53A8361BDFF30100272C0D /* BEFormType.h */,
 				AB53A8371BDFF30100272C0D /* BEFormType.m */,
+				AB53A8401BE293FB00272C0D /* BEForm.h */,
+				AB53A8411BE293FB00272C0D /* BEForm.m */,
 			);
 			name = Form;
 			sourceTree = "<group>";
@@ -238,6 +246,8 @@
 			children = (
 				ABDDADF31BD862340012BEE3 /* NSDictionary+BEEncoding.h */,
 				ABDDADF41BD862340012BEE3 /* NSDictionary+BEEncoding.m */,
+				AB53A8431BE6DF5700272C0D /* NSURL+BEAdditions.h */,
+				AB53A8441BE6DF5700272C0D /* NSURL+BEAdditions.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -379,8 +389,10 @@
 				AB53A83C1BE1312C00272C0D /* BEDismissSegue.m in Sources */,
 				ABBA0BC21BC8661900781666 /* BEClientController.m in Sources */,
 				ABDDADF51BD862340012BEE3 /* NSDictionary+BEEncoding.m in Sources */,
+				AB53A8421BE293FB00272C0D /* BEForm.m in Sources */,
 				ABBA0BCA1BCC1A6A00781666 /* BEFormViewController.m in Sources */,
 				ABBA0BCE1BCC1DB500781666 /* BEClient.m in Sources */,
+				AB53A8451BE6DF5700272C0D /* NSURL+BEAdditions.m in Sources */,
 				AB53A82C1BDED8FE00272C0D /* BELocation.m in Sources */,
 				AB53A8321BDEE9AF00272C0D /* BEFormTypeViewController.m in Sources */,
 				AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */,

@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BEClient.h"
+#import "NSURL+BEAdditions.h"
 #import "NSDictionary+BEEncoding.h"
 
 #import <UICKeyChainStore/UICKeyChainStore.h>
@@ -21,6 +22,7 @@ static NSString * const BEClientKeychainFormTypeIdentifier = @"form-type";
 static NSString * const BEClientAuthenticationResource = @"get-token/";
 static NSString * const BEClientFormTypesResource = @"formtypes/";
 static NSString * const BEClientJobStubsResource = @"jobstubs/";
+static NSString * const BEClientFormResource = @"form/";
 
 // Typedefs.
 typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSError *error);
@@ -57,6 +59,10 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	self.keychain[BEClientKeychainUsernameIdentifier] = currentAccount.username;
 	self.keychain[BEClientKeychainPasswordIdentifier] = currentAccount.password;
 	self.keychain[BEClientKeychainProviderIdentifier] = currentAccount.provider;
+	
+	if (currentAccount == nil) {
+		self.keychain[BEClientKeychainFormTypeIdentifier] = nil;
+	}
 }
 
 - (BEAccount *)currentAccount {
@@ -88,7 +94,8 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 - (NSURL *)resourceURLWithBaseProvider:(NSString *)provider resource:(NSString *)resource {
 	NSURL *baseURL = [NSURL URLWithString:provider];
-	return [baseURL URLByAppendingPathComponent:resource];
+	baseURL = [baseURL URLByAppendingPathComponent:resource];
+	return [baseURL be_URLByAppendingTrailingSlash];
 }
 
 
@@ -182,9 +189,9 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 #pragma mark - Forms
 
-- (void)requestFormTypesWithCompletion:(void (^)(NSArray<BEFormType *> *, BOOL))completion {
+- (void)requestFormTypesWithCompletion:(void (^)(NSArray<BEFormType *> *))completion {
 	if (self.token == nil) {
-		completion(nil, NO);
+		completion(nil);
 		return;
 	}
 	
@@ -193,10 +200,33 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
 		NSArray *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
 		if (obj == nil) {
-			completion(nil, NO);
+			completion(nil);
 		} else {
 			NSArray *objects = [MTLJSONAdapter modelsOfClass:BEFormType.class fromJSONArray:obj error:&error];
-			completion(objects, YES);
+			completion(objects);
+		}
+	};
+	
+	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];
+	[task resume];
+}
+
+- (void)requestFormWithFormType:(NSNumber *)formTypeID completion:(void (^)(BEForm *))completion {
+	if (self.token == nil) {
+		completion(nil);
+		return;
+	}
+	
+	NSString *resource = BEClientFormResource;
+	resource = [resource stringByAppendingPathComponent:formTypeID.stringValue];
+	
+	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
+		NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+		if (obj == nil) {
+			completion(nil);
+		} else {
+			BEForm *form = [MTLJSONAdapter modelOfClass:BEForm.class fromJSONDictionary:obj error:&error];
+			completion(form);
 		}
 	};
 	
@@ -207,9 +237,9 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 #pragma mark - Jobs
 
-- (void)requestJobStubsPageWithState:(BEJobStubState)state completion:(void (^)(BEJobStubPage *, BOOL))completion {
+- (void)requestJobStubsPageWithState:(BEJobStubState)state completion:(void (^)(BEJobStubPage *))completion {
 	if (self.token == nil) {
-		completion(nil, NO);
+		completion(nil);
 		return;
 	}
 	
@@ -218,7 +248,7 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
 		NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 		BEJobStubPage *page = [MTLJSONAdapter modelOfClass:BEJobStubPage.class fromJSONDictionary:obj error:&error];
-		completion(page, YES);
+		completion(page);
 	};
 	
 	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];
