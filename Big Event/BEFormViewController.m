@@ -2,7 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BEFormViewController.h"
-#import "XLFormRowDescriptor+BEAdditions.h"
+#import "BEFormRowDescriptor.h"
 #import "BEClientController.h"
 #import "BEConstants.h"
 
@@ -28,7 +28,7 @@
 	XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
 	
 	for (BEField *field in formData.fields) {
-		XLFormRowDescriptor *row = [XLFormRowDescriptor be_formDescriptorWithField:field];
+		BEFormRowDescriptor *row = [BEFormRowDescriptor formDescriptorWithField:field];
 		[section addFormRow:row];
 	}
 	
