@@ -24,6 +24,7 @@
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	
+	self.navigationItem.title = @"Form Types";
 	self.currentSelection = NSNotFound;
 	
 	if (!BEClientController.sharedController.client.authenticated) {

@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BENavigationController.h"
+#import "BEAppearance.h"
 
 @interface BENavigationController ()
 
