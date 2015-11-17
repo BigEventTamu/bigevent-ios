@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		006BACEB99AD40B6A505383A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 962FCDB207B7B1E903C2D045 /* libPods.a */; };
+		AB11B5291BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB11B5281BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.m */; };
+		AB3293111BE9005A009D92E7 /* BEFormRowDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AB3293101BE9005A009D92E7 /* BEFormRowDescriptor.m */; };
 		AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB4F2B151BC1CA99003033B7 /* BENavigationController.m */; };
 		AB53A8291BDED53200272C0D /* BEJobStub.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8281BDED53200272C0D /* BEJobStub.m */; };
 		AB53A82C1BDED8FE00272C0D /* BELocation.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A82B1BDED8FE00272C0D /* BELocation.m */; };
@@ -20,7 +22,6 @@
 		AB53A8451BE6DF5700272C0D /* NSURL+BEAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8441BE6DF5700272C0D /* NSURL+BEAdditions.m */; };
 		AB53A8481BE6E45400272C0D /* BEField.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8471BE6E45400272C0D /* BEField.m */; };
 		AB53A84B1BE74EFD00272C0D /* BEChoice.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A84A1BE74EFD00272C0D /* BEChoice.m */; };
-		AB53A84E1BE7541900272C0D /* XLFormRowDescriptor+BEAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A84D1BE7541900272C0D /* XLFormRowDescriptor+BEAdditions.m */; };
 		AB53A8531BE7581E00272C0D /* NSArray+BEHigherOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = AB53A8521BE7581D00272C0D /* NSArray+BEHigherOrder.m */; };
 		AB76ADE01BC1C5B60000C91B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADDF1BC1C5B60000C91B /* main.m */; };
 		AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = AB76ADE21BC1C5B60000C91B /* BEAppDelegate.m */; };
@@ -40,6 +41,10 @@
 /* Begin PBXFileReference section */
 		05734F9F4CBE0E24B5676833 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		962FCDB207B7B1E903C2D045 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AB11B5271BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSJSONSerialization+BEAdditions.h"; sourceTree = "<group>"; };
+		AB11B5281BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSJSONSerialization+BEAdditions.m"; sourceTree = "<group>"; };
+		AB32930F1BE9005A009D92E7 /* BEFormRowDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEFormRowDescriptor.h; sourceTree = "<group>"; };
+		AB3293101BE9005A009D92E7 /* BEFormRowDescriptor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEFormRowDescriptor.m; sourceTree = "<group>"; };
 		AB4F2B141BC1CA99003033B7 /* BENavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BENavigationController.h; sourceTree = "<group>"; };
 		AB4F2B151BC1CA99003033B7 /* BENavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BENavigationController.m; sourceTree = "<group>"; };
 		AB53A8271BDED53200272C0D /* BEJobStub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEJobStub.h; sourceTree = "<group>"; };
@@ -64,8 +69,6 @@
 		AB53A8471BE6E45400272C0D /* BEField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEField.m; sourceTree = "<group>"; };
 		AB53A8491BE74EFD00272C0D /* BEChoice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEChoice.h; sourceTree = "<group>"; };
 		AB53A84A1BE74EFD00272C0D /* BEChoice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BEChoice.m; sourceTree = "<group>"; };
-		AB53A84C1BE7541900272C0D /* XLFormRowDescriptor+BEAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "XLFormRowDescriptor+BEAdditions.h"; sourceTree = "<group>"; };
-		AB53A84D1BE7541900272C0D /* XLFormRowDescriptor+BEAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "XLFormRowDescriptor+BEAdditions.m"; sourceTree = "<group>"; };
 		AB53A8511BE7581D00272C0D /* NSArray+BEHigherOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+BEHigherOrder.h"; sourceTree = "<group>"; };
 		AB53A8521BE7581D00272C0D /* NSArray+BEHigherOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+BEHigherOrder.m"; sourceTree = "<group>"; };
 		AB76ADDB1BC1C5B60000C91B /* Big Event.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Big Event.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -149,6 +152,8 @@
 				AB53A8471BE6E45400272C0D /* BEField.m */,
 				AB53A8491BE74EFD00272C0D /* BEChoice.h */,
 				AB53A84A1BE74EFD00272C0D /* BEChoice.m */,
+				AB32930F1BE9005A009D92E7 /* BEFormRowDescriptor.h */,
+				AB3293101BE9005A009D92E7 /* BEFormRowDescriptor.m */,
 			);
 			name = Form;
 			sourceTree = "<group>";
@@ -173,17 +178,10 @@
 				AB53A8441BE6DF5700272C0D /* NSURL+BEAdditions.m */,
 				AB53A8511BE7581D00272C0D /* NSArray+BEHigherOrder.h */,
 				AB53A8521BE7581D00272C0D /* NSArray+BEHigherOrder.m */,
+				AB11B5271BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.h */,
+				AB11B5281BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.m */,
 			);
 			name = Foundation;
-			sourceTree = "<group>";
-		};
-		AB53A8501BE7542800272C0D /* XLForm */ = {
-			isa = PBXGroup;
-			children = (
-				AB53A84C1BE7541900272C0D /* XLFormRowDescriptor+BEAdditions.h */,
-				AB53A84D1BE7541900272C0D /* XLFormRowDescriptor+BEAdditions.m */,
-			);
-			name = XLForm;
 			sourceTree = "<group>";
 		};
 		AB76ADD21BC1C5B60000C91B = {
@@ -283,7 +281,6 @@
 			isa = PBXGroup;
 			children = (
 				AB53A84F1BE7541D00272C0D /* Foundation */,
-				AB53A8501BE7542800272C0D /* XLForm */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -417,6 +414,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AB11B5291BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.m in Sources */,
 				AB53A8291BDED53200272C0D /* BEJobStub.m in Sources */,
 				AB53A82F1BDEDCE100272C0D /* BEJobStubPage.m in Sources */,
 				ABBA0BB51BC8292600781666 /* BEAccountViewController.m in Sources */,
@@ -425,6 +423,7 @@
 				AB53A83C1BE1312C00272C0D /* BEDismissSegue.m in Sources */,
 				ABBA0BC21BC8661900781666 /* BEClientController.m in Sources */,
 				AB53A8531BE7581E00272C0D /* NSArray+BEHigherOrder.m in Sources */,
+				AB3293111BE9005A009D92E7 /* BEFormRowDescriptor.m in Sources */,
 				ABDDADF51BD862340012BEE3 /* NSDictionary+BEEncoding.m in Sources */,
 				AB53A8421BE293FB00272C0D /* BEForm.m in Sources */,
 				ABBA0BCA1BCC1A6A00781666 /* BEFormViewController.m in Sources */,
@@ -432,7 +431,6 @@
 				AB53A8451BE6DF5700272C0D /* NSURL+BEAdditions.m in Sources */,
 				AB53A82C1BDED8FE00272C0D /* BELocation.m in Sources */,
 				AB53A8321BDEE9AF00272C0D /* BEFormTypeViewController.m in Sources */,
-				AB53A84E1BE7541900272C0D /* XLFormRowDescriptor+BEAdditions.m in Sources */,
 				AB76ADE31BC1C5B60000C91B /* BEAppDelegate.m in Sources */,
 				AB4F2B161BC1CA99003033B7 /* BENavigationController.m in Sources */,
 				ABBA0BC51BC8662900781666 /* BEAccount.m in Sources */,

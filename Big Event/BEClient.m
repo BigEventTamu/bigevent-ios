@@ -4,12 +4,14 @@
 #import "BEClient.h"
 #import "NSURL+BEAdditions.h"
 #import "NSDictionary+BEEncoding.h"
+#import "NSJSONSerialization+BEAdditions.h"
 
 #import <UICKeyChainStore/UICKeyChainStore.h>
 
 
 // Notifications.
 NSString * const BEClientDidLogoutNotification = @"BEClientDidLogout";
+NSString * const BEClientDidUpdateFormTypeNotification = @"BEClientDidUpdateFormType";
 
 // Keychain.
 static NSString * const BEClientKeychainTokenIdentifier = @"authentication-token";
@@ -24,8 +26,13 @@ static NSString * const BEClientFormTypesResource = @"formtypes/";
 static NSString * const BEClientJobStubsResource = @"jobstubs/";
 static NSString * const BEClientFormResource = @"form/";
 
+// Status codes.
+static const NSInteger BEClientHTTPStatusOK = 200;
+static const NSInteger BEClientHTTPStatusProcessed = 203;
+static const NSInteger BEClientHTTPStatusPartialContent = 206;
+
 // Typedefs.
-typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSError *error);
+typedef void (^BERequestCompletion)(NSData *data, NSHTTPURLResponse *response, NSError *error);
 
 
 @interface BEClient () <NSURLSessionDelegate>
@@ -38,6 +45,7 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 @implementation BEClient
 @synthesize currentAccount = _currentAccount;
+
 
 #pragma mark - Keychain
 
@@ -79,10 +87,18 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 
 - (void)setCurrentFormTypeID:(NSNumber *)currentFormTypeID {
 	self.keychain[BEClientKeychainFormTypeIdentifier] = currentFormTypeID.stringValue;
+	
+	[NSNotificationCenter.defaultCenter postNotificationName:BEClientDidUpdateFormTypeNotification object:nil];
 }
 
 - (NSNumber *)currentFormTypeID {
-	return @(self.keychain[BEClientKeychainFormTypeIdentifier].integerValue);
+	NSString *formTypeID = self.keychain[BEClientKeychainFormTypeIdentifier];
+	
+	if (formTypeID != nil) {
+		return @(formTypeID.integerValue);
+	}
+	
+	return nil;
 }
 
 
@@ -99,6 +115,13 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 }
 
 
+#pragma mark - Formatting
+
+static NSString * BEAuthorizationToken(NSString *token) {
+	return (token != nil ? [NSString stringWithFormat:@"Token %@", token] : @"");
+}
+
+
 #pragma mark - Networking
 
 - (NSURLSessionDataTask *)POSTRequestWithResource:(NSString *)resource parameters:(NSDictionary *)parameters completion:(BERequestCompletion)completion {
@@ -108,7 +131,8 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	request.HTTPBody = [parameters.be_URLEncodedParameters dataUsingEncoding:NSUTF8StringEncoding];
 	request.HTTPMethod = @"POST";
 	request.allHTTPHeaderFields = @{
-		@"Content-Type": @"application/x-www-form-urlencoded"
+		@"Content-Type": @"application/x-www-form-urlencoded",
+		@"Authorization": BEAuthorizationToken(self.token)
 	};
 	
 	NSURLSessionConfiguration *configuration = NSURLSessionConfiguration.defaultSessionConfiguration;
@@ -116,7 +140,7 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	
 	return [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			completion(data, response, error);
+			completion(data, (NSHTTPURLResponse *)response, error);
 		});
 	}];
 }
@@ -133,12 +157,12 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:resourceURL];
 	request.allHTTPHeaderFields = @{
-		@"Authorization": [NSString stringWithFormat:@"Token %@", self.token]
+		@"Authorization": BEAuthorizationToken(self.token)
 	};
 	
 	return [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 		dispatch_async(dispatch_get_main_queue(), ^{
-			completion(data, response, error);
+			completion(data, (NSHTTPURLResponse *)response, error);
 		});
 	}];
 }
@@ -170,10 +194,8 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	
 	NSString *resource = BEClientAuthenticationResource;
 	
-	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
-		NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-		
-		if (data != nil && httpResponse.statusCode == 200) {
+	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+		if (response.statusCode == BEClientHTTPStatusOK && data != nil) {
 			NSString *token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 			self.token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""]; // strip quotes
 			completion(YES);
@@ -197,12 +219,12 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	
 	NSString *resource = BEClientFormTypesResource;
 	
-	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
-		NSArray *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-		if (obj == nil) {
+	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+		if (response.statusCode != BEClientHTTPStatusOK) {
 			completion(nil);
 		} else {
-			NSArray *objects = [MTLJSONAdapter modelsOfClass:BEFormType.class fromJSONArray:obj error:&error];
+			NSArray *JSON = [NSJSONSerialization be_JSONObjectWithData:data error:&error];
+			NSArray *objects = [MTLJSONAdapter modelsOfClass:BEFormType.class fromJSONArray:JSON error:&error];
 			completion(objects);
 		}
 	};
@@ -220,17 +242,49 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	NSString *resource = BEClientFormResource;
 	resource = [resource stringByAppendingPathComponent:formTypeID.stringValue];
 	
-	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
-		NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-		if (obj == nil) {
+	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+		if (response.statusCode != BEClientHTTPStatusOK) {
 			completion(nil);
 		} else {
-			BEForm *form = [MTLJSONAdapter modelOfClass:BEForm.class fromJSONDictionary:obj error:&error];
+			NSDictionary *JSON = [NSJSONSerialization be_JSONObjectWithData:data error:&error];
+			BEForm *form = [MTLJSONAdapter modelOfClass:BEForm.class fromJSONDictionary:JSON error:&error];
 			completion(form);
 		}
 	};
 	
 	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];
+	[task resume];
+}
+
+- (void)submitForm:(BEForm *)form stub:(BEJobStub *)stub completion:(void (^)(BOOL))completion {
+	if (self.token == nil) {
+		completion(NO);
+		return;
+	}
+	
+	NSString *resource = BEClientFormResource;
+	resource = [resource stringByAppendingPathComponent:form.formTypeID.stringValue];
+	
+	// Encode the form and the job request id into url-encoded parameters.
+	NSMutableDictionary *parameters = form.parameterValue.mutableCopy;
+	[parameters addEntriesFromDictionary:@{
+		@"job_request_id": stub.requestID
+	}];
+	
+	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+		if (response.statusCode != BEClientHTTPStatusProcessed || data == nil) {
+			completion(NO);
+		} else {
+			NSString *identifier = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+
+			NSLog(@"unique form ID: %@", identifier);
+			completion(YES);
+		}
+	};
+	
+	NSLog(@"form params: %@", parameters);
+	
+	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completion:requestCompletion];
 	[task resume];
 }
 
@@ -245,10 +299,14 @@ typedef void (^BERequestCompletion)(NSData *data, NSURLResponse *response, NSErr
 	
 	NSString *resource = BEClientJobStubsResource;
 	
-	BERequestCompletion requestCompletion = ^(NSData *data, NSURLResponse *response, NSError *error) {
-		NSDictionary *obj = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-		BEJobStubPage *page = [MTLJSONAdapter modelOfClass:BEJobStubPage.class fromJSONDictionary:obj error:&error];
-		completion(page);
+	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
+		if (response.statusCode != BEClientHTTPStatusPartialContent) {
+			completion(nil);
+		} else {
+			NSDictionary *JSON = [NSJSONSerialization be_JSONObjectWithData:data error:&error];
+			BEJobStubPage *page = [MTLJSONAdapter modelOfClass:BEJobStubPage.class fromJSONDictionary:JSON error:&error];
+			completion(page);
+		}
 	};
 	
 	NSURLSessionDataTask *task = [self GETRequestWithResource:resource pathParameters:nil completion:requestCompletion];

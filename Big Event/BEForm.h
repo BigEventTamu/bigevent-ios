@@ -12,4 +12,6 @@
 @property (readonly, strong) NSNumber *formTypeID;
 @property (readonly, strong) NSArray<BEField *> *fields;
 
+- (NSDictionary *)parameterValue;
+
 @end

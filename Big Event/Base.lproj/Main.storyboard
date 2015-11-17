@@ -15,15 +15,15 @@
                         <animations/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" textLabel="AtA-GS-bJ5" style="IBUITableViewCellStyleDefault" id="LYn-Nt-QVz">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" textLabel="AtA-GS-bJ5" style="IBUITableViewCellStyleDefault" id="LYn-Nt-QVz">
                                 <rect key="frame" x="0.0" y="113.5" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LYn-Nt-QVz" id="DxY-hh-re4">
-                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AtA-GS-bJ5">
-                                            <rect key="frame" x="15" y="0.0" width="570" height="43.5"/>
+                                            <rect key="frame" x="15" y="0.0" width="550" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <animations/>
                                             <fontDescription key="fontDescription" type="system" pointSize="16"/>
@@ -107,10 +107,14 @@
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="Yn0-xM-vtr"/>
+                    <connections>
+                        <segue destination="WYf-LD-2kB" kind="presentation" identifier="form-type-show" id="uV2-mZ-aui"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sYl-oq-AGG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1382" y="1061"/>
+            <point key="canvasLocation" x="1418" y="1061"/>
         </scene>
         <!--Form Type View Controller-->
         <scene sceneID="plO-Bx-TeK">
@@ -141,9 +145,6 @@
                                     <animations/>
                                 </tableViewCellContentView>
                                 <animations/>
-                                <connections>
-                                    <segue destination="YQ8-xy-Ghz" kind="custom" identifier="form-type-pop" customClass="BEPopSegue" id="NKI-nW-W97"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -151,6 +152,10 @@
                             <outlet property="delegate" destination="WYf-LD-2kB" id="aBI-UU-htu"/>
                         </connections>
                     </tableView>
+                    <connections>
+                        <segue destination="okO-aB-ViD" kind="custom" identifier="form-type-dismiss" customClass="BEDismissSegue" id="DTr-Rf-6qR"/>
+                        <segue destination="YQ8-xy-Ghz" kind="custom" identifier="form-type-pop" customClass="BEPopSegue" id="5cq-cv-YDv"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="53N-U4-TJy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -386,6 +391,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="NKI-nW-W97"/>
+        <segue reference="ncj-SL-Cco"/>
+        <segue reference="uV2-mZ-aui"/>
+        <segue reference="Odt-hX-adR"/>
     </inferredMetricsTieBreakers>
 </document>
