@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BEAppDelegate.h"
+#import "BEAppearance.h"
 
 #import <PonyDebugger/PonyDebugger.h>
 
@@ -19,6 +20,8 @@
 	[debugger connectToURL:[NSURL URLWithString:@"ws://localhost:9000/device"]];
 #endif
 #endif
+	
+	BEApplyAppearance();
 }
 
 @end
