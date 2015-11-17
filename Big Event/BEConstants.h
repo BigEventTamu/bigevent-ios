@@ -12,5 +12,6 @@ extern NSString * const BEAccountDoneSegueIdentifier;
 
 extern NSString * const BEFormShowSegueIdentifier;
 
-extern NSString * const BEFormTypeShowSegueIdentifier;
 extern NSString * const BEFormTypePopSegueIdentifier;
+extern NSString * const BEFormTypeShowSegueIdentifier;
+extern NSString * const BEFormTypeDismissSegueIdentifier;

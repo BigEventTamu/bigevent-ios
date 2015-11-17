@@ -12,3 +12,4 @@ NSString * const BEFormShowSegueIdentifier = @"form-show";
 
 NSString * const BEFormTypePopSegueIdentifier = @"form-type-pop";
 NSString * const BEFormTypeShowSegueIdentifier = @"form-type-show";
+NSString * const BEFormTypeDismissSegueIdentifier = @"form-type-dismiss";

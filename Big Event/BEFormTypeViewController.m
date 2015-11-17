@@ -77,6 +77,13 @@
 }
 
 
+#pragma mark - Client
+
+- (void)saveSelectedFormType:(BEFormType *)selectedType {
+	BEClientController.sharedController.client.currentFormTypeID = selectedType.identifier;
+}
+
+
 #pragma mark - Table View
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -106,18 +113,15 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
 	UITableViewCell *selectedCell = [tableView cellForRowAtIndexPath:indexPath];
 	selectedCell.accessoryType = UITableViewCellAccessoryCheckmark;
-}
-
-
-#pragma mark - Navigation
-
-- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-	if ([identifier isEqualToString:BEFormTypePopSegueIdentifier]) {
-		BEFormType *selectedType = self.formTypes[self.tableView.indexPathForSelectedRow.section];
-		BEClientController.sharedController.client.currentFormTypeID = selectedType.identifier;
-	}
 	
-	return YES;
+	BEFormType *selectedType = self.formTypes[self.tableView.indexPathForSelectedRow.section];
+	[self saveSelectedFormType:selectedType];
+	
+	if (self.navigationController != nil) {
+		[self performSegueWithIdentifier:BEFormTypePopSegueIdentifier sender:nil];
+	} else {
+		[self performSegueWithIdentifier:BEFormTypeDismissSegueIdentifier sender:nil];
+	}
 }
 
 @end

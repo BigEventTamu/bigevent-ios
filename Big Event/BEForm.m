@@ -18,4 +18,19 @@
 	return [MTLJSONAdapter arrayTransformerWithModelClass:BEField.class];
 }
 
+- (NSDictionary *)parameterValue {
+	NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+	
+	[self.fields enumerateObjectsUsingBlock:^(BEField *field, NSUInteger idx, BOOL *stop) {
+		id value = field.value;
+		if ([value respondsToSelector:@selector(stringValue)]) {
+			value = [value stringValue];
+		}
+		
+		parameters[field.fieldID] = value;
+	}];
+	
+	return parameters;
+}
+
 @end

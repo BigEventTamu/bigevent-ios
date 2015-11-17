@@ -9,6 +9,7 @@
 #import "BEForm.h"
 
 extern NSString * const BEClientDidLogoutNotification;
+extern NSString * const BEClientDidUpdateFormTypeNotification;
 
 @interface BEClient : NSObject
 
@@ -44,6 +45,7 @@ extern NSString * const BEClientDidLogoutNotification;
 - (void)requestFormTypesWithCompletion:(void (^)(NSArray<BEFormType *> *types))completion;
 
 - (void)requestFormWithFormType:(NSNumber *)formTypeID completion:(void (^)(BEForm *form))completion;
+- (void)submitForm:(BEForm *)form stub:(BEJobStub *)stub completion:(void (^)(BOOL success))completion;
 
 #pragma mark - Jobs
 
