@@ -43,6 +43,14 @@ typedef void (^BERequestCompletion)(NSData *data, NSHTTPURLResponse *response, N
 @synthesize currentAccount = _currentAccount;
 
 
+#pragma mark - Caching
+
+- (instancetype)cache {
+	// Overridden in caching subclass.
+	return self;
+}
+
+
 #pragma mark - Keychain
 
 - (UICKeyChainStore *)keychain {

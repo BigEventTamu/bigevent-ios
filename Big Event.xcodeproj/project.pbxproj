@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		006BACEB99AD40B6A505383A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 962FCDB207B7B1E903C2D045 /* libPods.a */; };
 		AB0B2B5F1C080CA800FABC9C /* NSHTTPURLResponse+BEAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB0B2B5E1C080CA800FABC9C /* NSHTTPURLResponse+BEAdditions.m */; };
+		AB0B2B621C0847EC00FABC9C /* BECachedClient.m in Sources */ = {isa = PBXBuildFile; fileRef = AB0B2B611C0847EC00FABC9C /* BECachedClient.m */; };
 		AB11B5291BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB11B5281BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.m */; };
 		AB3293111BE9005A009D92E7 /* BEFormRowDescriptor.m in Sources */ = {isa = PBXBuildFile; fileRef = AB3293101BE9005A009D92E7 /* BEFormRowDescriptor.m */; };
 		AB3CC8481BFB1B8D00C56706 /* BEAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = AB3CC8471BFB1B8D00C56706 /* BEAppearance.m */; };
@@ -45,6 +46,8 @@
 		962FCDB207B7B1E903C2D045 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB0B2B5D1C080CA800FABC9C /* NSHTTPURLResponse+BEAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSHTTPURLResponse+BEAdditions.h"; sourceTree = "<group>"; };
 		AB0B2B5E1C080CA800FABC9C /* NSHTTPURLResponse+BEAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSHTTPURLResponse+BEAdditions.m"; sourceTree = "<group>"; };
+		AB0B2B601C0847EC00FABC9C /* BECachedClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BECachedClient.h; sourceTree = "<group>"; };
+		AB0B2B611C0847EC00FABC9C /* BECachedClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BECachedClient.m; sourceTree = "<group>"; };
 		AB11B5271BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSJSONSerialization+BEAdditions.h"; sourceTree = "<group>"; };
 		AB11B5281BFAE1E0008E09D6 /* NSJSONSerialization+BEAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSJSONSerialization+BEAdditions.m"; sourceTree = "<group>"; };
 		AB32930F1BE9005A009D92E7 /* BEFormRowDescriptor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BEFormRowDescriptor.h; sourceTree = "<group>"; };
@@ -272,6 +275,8 @@
 				ABBA0BC11BC8661900781666 /* BEClientController.m */,
 				ABBA0BCC1BCC1DB500781666 /* BEClient.h */,
 				ABBA0BCD1BCC1DB500781666 /* BEClient.m */,
+				AB0B2B601C0847EC00FABC9C /* BECachedClient.h */,
+				AB0B2B611C0847EC00FABC9C /* BECachedClient.m */,
 			);
 			name = Networking;
 			sourceTree = "<group>";
@@ -433,6 +438,7 @@
 				AB53A83C1BE1312C00272C0D /* BEDismissSegue.m in Sources */,
 				ABBA0BC21BC8661900781666 /* BEClientController.m in Sources */,
 				AB0B2B5F1C080CA800FABC9C /* NSHTTPURLResponse+BEAdditions.m in Sources */,
+				AB0B2B621C0847EC00FABC9C /* BECachedClient.m in Sources */,
 				AB53A8531BE7581E00272C0D /* NSArray+BEHigherOrder.m in Sources */,
 				AB3293111BE9005A009D92E7 /* BEFormRowDescriptor.m in Sources */,
 				ABDDADF51BD862340012BEE3 /* NSDictionary+BEEncoding.m in Sources */,
