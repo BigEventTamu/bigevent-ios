@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BEFormViewController.h"
+#import "NSArray+BEHigherOrder.h"
 #import "BEFormRowDescriptor.h"
 #import "BEClientController.h"
 #import "BEConstants.h"
@@ -107,6 +108,8 @@
 	[client submitForm:self.formValue stub:self.stub completion:^(BOOL success) {
 		if (success) {
 			[SVProgressHUD showSuccessWithStatus:@"Submitted"];
+			
+			[self performSegueWithIdentifier:BEFormPopSegueIdentifier sender:nil];
 		} else {
 			[SVProgressHUD showErrorWithStatus:@"Submission error"];
 		}
@@ -118,16 +121,20 @@
 
 - (void)formRowDescriptorValueHasChanged:(XLFormRowDescriptor *)formRow oldValue:(id)oldValue newValue:(id)newValue {
 	BEFormRowDescriptor *row = (BEFormRowDescriptor *)formRow;
-
+	
+	id value = newValue;
+	
 	if ([newValue isKindOfClass:XLFormOptionsObject.class]) { // choice field
-		row.field.value = ((XLFormOptionsObject *)newValue).formValue;
-	} else {
-		row.field.value = newValue;
+		value = ((XLFormOptionsObject *)newValue).formValue;
 	}
 	
-	NSLog(@"* row (%@) has new value (%@)", row.tag, row.field.value);
+	if ([value respondsToSelector:@selector(stringValue)]) {
+		value = [value stringValue];
+	}
 	
-	// TODO: save locally
+	row.field.value = value;
+	
+	// TODO: potentially cache locally if draft mode is needed.
 }
 
 @end

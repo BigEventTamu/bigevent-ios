@@ -10,6 +10,7 @@ extern NSString * const BEAccountDefaultProvider;
 extern NSString * const BEAccountSegueIdentifier;
 extern NSString * const BEAccountDoneSegueIdentifier;
 
+extern NSString * const BEFormPopSegueIdentifier;
 extern NSString * const BEFormShowSegueIdentifier;
 
 extern NSString * const BEFormTypePopSegueIdentifier;

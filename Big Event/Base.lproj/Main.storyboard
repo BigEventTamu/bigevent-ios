@@ -16,7 +16,7 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" textLabel="AtA-GS-bJ5" style="IBUITableViewCellStyleDefault" id="LYn-Nt-QVz">
-                                <rect key="frame" x="0.0" y="113.5" width="600" height="44"/>
+                                <rect key="frame" x="0.0" y="49.5" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="LYn-Nt-QVz" id="DxY-hh-re4">
                                     <rect key="frame" x="0.0" y="0.0" width="567" height="43.5"/>
@@ -110,11 +110,12 @@
                     <navigationItem key="navigationItem" id="Yn0-xM-vtr"/>
                     <connections>
                         <segue destination="WYf-LD-2kB" kind="presentation" identifier="form-type-show" id="uV2-mZ-aui"/>
+                        <segue destination="BZV-Ab-iaf" kind="custom" identifier="form-pop" customClass="BEPopSegue" id="IwL-Ay-IP6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sYl-oq-AGG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1418" y="1061"/>
+            <point key="canvasLocation" x="1602" y="973"/>
         </scene>
         <!--Form Type View Controller-->
         <scene sceneID="plO-Bx-TeK">
@@ -399,8 +400,9 @@
         <image name="big-event" width="300" height="200"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="ZcE-P1-WkC"/>
+        <segue reference="IwL-Ay-IP6"/>
+        <segue reference="ncj-SL-Cco"/>
+        <segue reference="uV2-mZ-aui"/>
         <segue reference="5cq-cv-YDv"/>
-        <segue reference="DTr-Rf-6qR"/>
     </inferredMetricsTieBreakers>
 </document>
