@@ -4,6 +4,7 @@
 #import "BEClient.h"
 #import "NSURL+BEAdditions.h"
 #import "NSDictionary+BEEncoding.h"
+#import "NSHTTPURLResponse+BEAdditions.h"
 #import "NSJSONSerialization+BEAdditions.h"
 
 #import <UICKeyChainStore/UICKeyChainStore.h>
@@ -25,11 +26,6 @@ static NSString * const BEClientAuthenticationResource = @"get-token/";
 static NSString * const BEClientFormTypesResource = @"formtypes/";
 static NSString * const BEClientJobStubsResource = @"jobstubs/";
 static NSString * const BEClientFormResource = @"form/";
-
-// Status codes.
-static const NSInteger BEClientHTTPStatusOK = 200;
-static const NSInteger BEClientHTTPStatusProcessed = 203;
-static const NSInteger BEClientHTTPStatusPartialContent = 206;
 
 // Typedefs.
 typedef void (^BERequestCompletion)(NSData *data, NSHTTPURLResponse *response, NSError *error);
@@ -195,7 +191,7 @@ static NSString * BEAuthorizationToken(NSString *token) {
 	NSString *resource = BEClientAuthenticationResource;
 	
 	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
-		if (response.statusCode == BEClientHTTPStatusOK && data != nil) {
+		if (response.be_statusSuccess && data != nil) {
 			NSString *token = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 			self.token = [token stringByReplacingOccurrencesOfString:@"\"" withString:@""]; // strip quotes
 			completion(YES);
@@ -220,12 +216,12 @@ static NSString * BEAuthorizationToken(NSString *token) {
 	NSString *resource = BEClientFormTypesResource;
 	
 	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
-		if (response.statusCode != BEClientHTTPStatusOK) {
-			completion(nil);
-		} else {
+		if (response.be_statusSuccess) {
 			NSArray *JSON = [NSJSONSerialization be_JSONObjectWithData:data error:&error];
 			NSArray *objects = [MTLJSONAdapter modelsOfClass:BEFormType.class fromJSONArray:JSON error:&error];
 			completion(objects);
+		} else {
+			completion(nil);
 		}
 	};
 	
@@ -243,12 +239,12 @@ static NSString * BEAuthorizationToken(NSString *token) {
 	resource = [resource stringByAppendingPathComponent:formTypeID.stringValue];
 	
 	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
-		if (response.statusCode != BEClientHTTPStatusOK) {
-			completion(nil);
-		} else {
+		if (response.be_statusSuccess) {
 			NSDictionary *JSON = [NSJSONSerialization be_JSONObjectWithData:data error:&error];
 			BEForm *form = [MTLJSONAdapter modelOfClass:BEForm.class fromJSONDictionary:JSON error:&error];
 			completion(form);
+		} else {
+			completion(nil);
 		}
 	};
 	
@@ -272,17 +268,17 @@ static NSString * BEAuthorizationToken(NSString *token) {
 	}];
 	
 	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
-		if (response.statusCode != BEClientHTTPStatusProcessed || data == nil) {
-			completion(NO);
-		} else {
+		if (response.be_statusSuccess && data != nil) {
 			NSString *identifier = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 
 			NSLog(@"unique form ID: %@", identifier);
 			completion(YES);
+		} else {
+			completion(NO);
 		}
 	};
 	
-	NSLog(@"form params: %@", parameters);
+	NSLog(@"form params: %@", parameters.be_URLEncodedParameters);
 	
 	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completion:requestCompletion];
 	[task resume];
@@ -300,12 +296,12 @@ static NSString * BEAuthorizationToken(NSString *token) {
 	NSString *resource = BEClientJobStubsResource;
 	
 	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
-		if (response.statusCode != BEClientHTTPStatusPartialContent) {
-			completion(nil);
-		} else {
+		if (response.be_statusSuccess) {
 			NSDictionary *JSON = [NSJSONSerialization be_JSONObjectWithData:data error:&error];
 			BEJobStubPage *page = [MTLJSONAdapter modelOfClass:BEJobStubPage.class fromJSONDictionary:JSON error:&error];
 			completion(page);
+		} else {
+			completion(nil);
 		}
 	};
 	
