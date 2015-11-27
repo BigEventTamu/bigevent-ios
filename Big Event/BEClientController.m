@@ -2,6 +2,7 @@
 //  Created by Jonathan Willing
 
 #import "BEClientController.h"
+#import "BECachedClient.h"
 
 @interface BEClientController ()
 
@@ -31,7 +32,7 @@
 
 - (BEClient *)client {
 	if (_client == nil) {
-		_client = [[BEClient alloc] init];
+		_client = [[BECachedClient alloc] init];
 	}
 	
 	return _client;
