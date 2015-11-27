@@ -5,6 +5,10 @@
 
 @implementation NSDictionary (BEEncoding)
 
+NSString * const BENullString() {
+	return @"%00";
+}
+
 NSString * BEURLEncode(NSString *string) {
 	NSCharacterSet *characters = NSCharacterSet.URLQueryAllowedCharacterSet;
 	return [string stringByAddingPercentEncodingWithAllowedCharacters:characters];
@@ -15,9 +19,17 @@ NSString * BEURLEncode(NSString *string) {
 	
 	[self enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL *stop) {
 		NSAssert([key isKindOfClass:NSString.class], @"key must be a string");
-		NSAssert([obj isKindOfClass:NSString.class], @"object must be a string");
+		NSAssert([obj isKindOfClass:NSString.class] ||
+				 [obj isKindOfClass:NSNull.class], @"object must be a string or NSNull");
 		
-		NSString *component = [NSString stringWithFormat:@"%@=%@", BEURLEncode(key), BEURLEncode(obj)];
+		// Replace NSNull with characters representing null.
+		if ([obj isKindOfClass:NSNull.class]) {
+			obj = BENullString();
+		} else {
+			obj = BEURLEncode(obj);
+		}
+		
+		NSString *component = [NSString stringWithFormat:@"%@=%@", BEURLEncode(key), obj];
 		[components addObject:component];
 	}];
 	
