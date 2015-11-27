@@ -11,7 +11,8 @@
 
 @interface BERootViewController () <BEFormDelegate>
 
-@property (nonatomic, strong) BEJobStubPage *currentJobStubsPage;
+@property UIRefreshControl *refreshControl;
+@property BEJobStubPage *currentJobStubsPage;
 
 @end
 
@@ -26,12 +27,13 @@
 	
 	[self configureHUD];
 	[self registerNotifications];
+	[self setupRefreshControl];
 	
 	// If not authenticated, present the accounts modal.
 	if (!BEClientController.sharedController.client.authenticated) {
 		[self performSegueWithIdentifier:BEAccountSegueIdentifier sender:nil];
 	} else {
-		[self reloadForms];
+		[self reloadFormsCached:YES];
 	}
 }
 
@@ -41,13 +43,21 @@
 	[SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeNative];
 }
 
+- (void)setupRefreshControl {
+	UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+	[refreshControl addTarget:self action:@selector(refreshControlDidRefresh:) forControlEvents:UIControlEventValueChanged];
+	
+	[self.tableView addSubview:refreshControl];
+	self.refreshControl = refreshControl;
+}
+
 
 #pragma mark - Account Segue
 
 - (IBAction)accountDone:(UIStoryboardSegue *)segue {
 	NSAssert(BEClientController.sharedController.client.authenticated, @"accounts should not be dismissable unless authenticated");
 	
-	[self reloadForms];
+	[self reloadFormsCached:NO];
 }
 
 
@@ -65,18 +75,49 @@
 
 #pragma mark - Client
 
-- (void)reloadForms {
+- (void)reloadFormsCached:(BOOL)shouldUseCache {
+	[self.refreshControl beginRefreshing];
+	
 	BEClient *client = BEClientController.sharedController.client;
+	client = shouldUseCache ? client.cache : client;
+	
 	[client requestJobStubsPageWithState:BEJobStubStateSurveyNeeded completion:^(BEJobStubPage *page) {
-		if (page == nil) {
-			[SVProgressHUD showErrorWithStatus:@"Could not load forms"];
-			return;
+		if (page != nil) {
+			[self handleReloadFormsSuccessWithPage:page];
+		} else {
+			[self handleReloadFormsFailureCached:shouldUseCache];
 		}
-		
-		self.currentJobStubsPage = page;
-		[self.tableView reloadData];
 	}];
 }
+
+- (void)handleReloadFormsSuccessWithPage:(BEJobStubPage *)page {
+	self.currentJobStubsPage = page;
+	
+	[SVProgressHUD dismiss];
+	[self.refreshControl endRefreshing];
+	
+	[self.tableView reloadData];
+}
+
+- (void)handleReloadFormsFailureCached:(BOOL)shouldUseCache {
+	if (shouldUseCache) {
+		// If we tried to use the cache and it didn't have anything, try to do
+		// a normal network request.
+		[self reloadFormsCached:NO];
+	} else {
+		[SVProgressHUD showErrorWithStatus:@"Could not load forms"];
+		
+		[self.refreshControl endRefreshing];
+	}
+}
+
+
+#pragma mark - Actions
+
+- (void)refreshControlDidRefresh:(id)sender {
+	[self reloadFormsCached:NO];
+}
+
 
 #pragma mark - UITableViewDelegate
 
