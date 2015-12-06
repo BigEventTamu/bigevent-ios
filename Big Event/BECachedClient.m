@@ -63,7 +63,25 @@ static NSString * BECacheKeyJobStubs(BEAccount *account) {
 	return [NSString stringWithFormat:@"%@-stubs", account.username];
 }
 
-#pragma mark - Caching
+static NSString * BECacheKeyFormTypes(BEAccount *account) {
+	return [NSString stringWithFormat:@"%@-form-types", account.username];
+}
+
+static NSString * BECacheKeyForm(BEAccount *account, NSNumber *formType) {
+	return [NSString stringWithFormat:@"%@-%@-form", account.username, formType];
+}
+
+
+#pragma mark - Cache Invalidation
+
+- (void)logout {
+	[PINCache.sharedCache removeAllObjects];
+	
+	[super logout];
+}
+
+
+#pragma mark - Job Stubs
 
 - (void)requestJobStubsPageWithState:(BEJobStubState)state completion:(void (^)(BEJobStubPage *))completion {
 	NSString *key = BECacheKeyJobStubs(self.currentAccount);
@@ -83,5 +101,46 @@ static NSString * BECacheKeyJobStubs(BEAccount *account) {
 	}];
 }
 
+
+#pragma mark - Form Type
+
+- (void)requestFormTypesWithCompletion:(void (^)(NSArray<BEFormType *> *))completion {
+	NSString *key = BECacheKeyFormTypes(self.currentAccount);
+	
+	if (self.shouldUseCache) {
+		self.shouldUseCache = NO;
+		
+		completion([PINCache.sharedCache objectForKey:key]);
+		
+		return;
+	}
+	
+	[super requestFormTypesWithCompletion:^(NSArray<BEFormType *> *formTypes) {
+		[PINCache.sharedCache setObject:formTypes forKey:key];
+		
+		completion(formTypes);
+	}];
+}
+
+
+#pragma mark - Jobs
+
+- (void)requestFormWithFormType:(NSNumber *)formTypeID completion:(void (^)(BEForm *))completion {
+	NSString *key = BECacheKeyForm(self.currentAccount, formTypeID);
+	
+	if (self.shouldUseCache) {
+		self.shouldUseCache = NO;
+		
+		completion([PINCache.sharedCache objectForKey:key]);
+		
+		return;
+	}
+	
+	[super requestFormWithFormType:formTypeID completion:^(BEForm *form) {
+		[PINCache.sharedCache setObject:form forKey:key];
+		
+		completion(form);
+	}];
+}
 
 @end

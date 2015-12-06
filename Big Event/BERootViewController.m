@@ -11,7 +11,6 @@
 
 @interface BERootViewController () <BEFormDelegate>
 
-@property UIRefreshControl *refreshControl;
 @property BEJobStubPage *currentJobStubsPage;
 
 @end
@@ -105,7 +104,7 @@
 		// a normal network request.
 		[self reloadFormsCached:NO];
 	} else {
-		[SVProgressHUD showErrorWithStatus:@"Could not load forms"];
+		[SVProgressHUD showErrorWithStatus:@"Unable to load latest jobs"];
 		
 		[self.refreshControl endRefreshing];
 	}

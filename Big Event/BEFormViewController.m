@@ -83,7 +83,7 @@
 #pragma mark - Form Requests
 
 - (void)requestAndGenerateFormWithClient:(BEClient *)client {
-	[client requestFormWithFormType:client.currentFormTypeID completion:^(BEForm *form) {
+	[client.cache requestFormWithFormType:client.currentFormTypeID completion:^(BEForm *form) {
 		self.formValue = form;
 		[self generateFormWithForm:form];
 	}];
