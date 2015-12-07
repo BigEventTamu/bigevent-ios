@@ -2,8 +2,11 @@
 //  Created by Jonathan Willing
 
 #import "BEFormViewController.h"
+#import "NSArray+BEHigherOrder.h"
 #import "BEFormRowDescriptor.h"
 #import "BEClientController.h"
+#import "BEFormSubmission.h"
+#import "BEOfflineQueue.h"
 #import "BEConstants.h"
 
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -23,6 +26,17 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	
+	[self.navigationController setToolbarHidden:YES animated:YES];
+	
+	// If the form we're trying to edit is in the offline queue, return.
+	BEOfflineQueue *offlineQueue = BEClientController.sharedController.client.offlineQueue;
+	if ([offlineQueue submissionExistsWithRequestID:self.stub.requestID]) {
+		[SVProgressHUD showErrorWithStatus:@"Job is already pending submission"];
+		[self performSegueWithIdentifier:BEFormPopSegueIdentifier sender:nil];
+		
+		return;
+	}
 	
 	[self setupNotifications];
 	[self setupNavigationItems];
@@ -82,7 +96,7 @@
 #pragma mark - Form Requests
 
 - (void)requestAndGenerateFormWithClient:(BEClient *)client {
-	[client requestFormWithFormType:client.currentFormTypeID completion:^(BEForm *form) {
+	[client.cache requestFormWithFormType:client.currentFormTypeID completion:^(BEForm *form) {
 		self.formValue = form;
 		[self generateFormWithForm:form];
 	}];
@@ -102,11 +116,15 @@
 }
 
 - (void)submitFormWithClient:(BEClient *)client {
-	[SVProgressHUD show];
+	BEFormSubmission *submission = [[BEFormSubmission alloc] init];
+	submission.form = self.formValue;
+	submission.requestID = self.stub.requestID;
 	
-	[client submitForm:self.formValue stub:self.stub completion:^(BOOL success) {
+	[client submitForm:submission completion:^(BOOL success) {
 		if (success) {
 			[SVProgressHUD showSuccessWithStatus:@"Submitted"];
+			
+			[self performSegueWithIdentifier:BEFormPopSegueIdentifier sender:nil];
 		} else {
 			[SVProgressHUD showErrorWithStatus:@"Submission error"];
 		}
@@ -118,16 +136,20 @@
 
 - (void)formRowDescriptorValueHasChanged:(XLFormRowDescriptor *)formRow oldValue:(id)oldValue newValue:(id)newValue {
 	BEFormRowDescriptor *row = (BEFormRowDescriptor *)formRow;
-
+	
+	id value = newValue;
+	
 	if ([newValue isKindOfClass:XLFormOptionsObject.class]) { // choice field
-		row.field.value = ((XLFormOptionsObject *)newValue).formValue;
-	} else {
-		row.field.value = newValue;
+		value = ((XLFormOptionsObject *)newValue).formValue;
 	}
 	
-	NSLog(@"* row (%@) has new value (%@)", row.tag, row.field.value);
+	if ([value respondsToSelector:@selector(stringValue)]) {
+		value = [value stringValue];
+	}
 	
-	// TODO: save locally
+	row.field.value = value;
+	
+	// TODO: potentially cache locally if draft mode is needed.
 }
 
 @end

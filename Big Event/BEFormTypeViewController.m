@@ -41,7 +41,7 @@
 	[SVProgressHUD show];
 	
 	BEClient *client = BEClientController.sharedController.client;
-	[client requestFormTypesWithCompletion:^(NSArray<BEFormType *> *types) {
+	[client.cache requestFormTypesWithCompletion:^(NSArray<BEFormType *> *types) {
 		if (types != nil) {
 			self.formTypes = types;
 			

@@ -15,4 +15,14 @@
 	return objects;
 }
 
+- (id)be_findFirst:(BOOL (^)(id))predicate {
+	for (id obj in self) {
+		if (predicate(obj)) {
+			return obj;
+		}
+	}
+	
+	return nil;
+}
+
 @end

@@ -4,14 +4,16 @@
 #import "BERootViewController.h"
 #import "BEFormViewController.h"
 #import "BEClientController.h"
+#import "BEOfflineQueue.h"
 #import "BEConstants.h"
 
 #import <SVProgressHUD/SVProgressHUD.h>
 
 
-@interface BERootViewController () <BEFormDelegate>
+@interface BERootViewController () <BEFormDelegate, BEOfflineQueueDelegate>
 
-@property (nonatomic, strong) BEJobStubPage *currentJobStubsPage;
+@property UILabel *toolbarLabel;
+@property BEJobStubPage *currentJobStubsPage;
 
 @end
 
@@ -26,13 +28,21 @@
 	
 	[self configureHUD];
 	[self registerNotifications];
+	[self setupRefreshControl];
+	[self setupOfflineQueue];
 	
 	// If not authenticated, present the accounts modal.
 	if (!BEClientController.sharedController.client.authenticated) {
 		[self performSegueWithIdentifier:BEAccountSegueIdentifier sender:nil];
 	} else {
-		[self reloadForms];
+		[self reloadFormsCached:YES];
 	}
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	[self setupToolbar];
 }
 
 - (void)configureHUD {
@@ -41,13 +51,46 @@
 	[SVProgressHUD setDefaultAnimationType:SVProgressHUDAnimationTypeNative];
 }
 
+- (void)setupRefreshControl {
+	UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+	[refreshControl addTarget:self action:@selector(refreshControlDidRefresh:) forControlEvents:UIControlEventValueChanged];
+	
+	[self.tableView addSubview:refreshControl];
+	self.refreshControl = refreshControl;
+}
+
+- (void)setupOfflineQueue {
+	[BEClientController.sharedController.client.offlineQueue addDelegate:self];
+}
+
+- (void)setupToolbar {
+	BEOfflineQueue *queue = BEClientController.sharedController.client.offlineQueue;
+	if (queue.numberOfEnqueuedSubmissions > 0) {
+		[self.navigationController setToolbarHidden:NO animated:YES];
+	}
+	
+	UILabel *label = [[UILabel alloc] init];
+	label.text = self.currentToolbarTitle;
+	label.font = [UIFont systemFontOfSize:13];
+	label.textAlignment = NSTextAlignmentCenter;
+	label.frame = self.navigationController.toolbar.bounds;
+	
+	self.toolbarLabel = label;
+	
+	UIBarButtonItem *labelItem = [[UIBarButtonItem alloc] initWithCustomView:label];
+	UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	NSArray *items = @[ spacer, labelItem, spacer ];
+	
+	self.navigationController.toolbar.items = items;
+}
+
 
 #pragma mark - Account Segue
 
 - (IBAction)accountDone:(UIStoryboardSegue *)segue {
 	NSAssert(BEClientController.sharedController.client.authenticated, @"accounts should not be dismissable unless authenticated");
 	
-	[self reloadForms];
+	[self reloadFormsCached:NO];
 }
 
 
@@ -56,27 +99,85 @@
 - (void)registerNotifications {
 	NSNotificationCenter *nc = NSNotificationCenter.defaultCenter;
 	[nc addObserver:self selector:@selector(clientDidLogout:) name:BEClientDidLogoutNotification object:nil];
+	[nc addObserver:self selector:@selector(clientDidSubmitForm:) name:BEClientDidSubmitFormNotification object:nil];
 }
 
 - (void)clientDidLogout:(NSNotification *)note {
 	[self.tableView reloadData];
 }
 
+- (void)clientDidSubmitForm:(NSNotification *)note {
+	[self reloadFormsCached:NO];
+}
+
 
 #pragma mark - Client
 
-- (void)reloadForms {
+- (void)reloadFormsCached:(BOOL)shouldUseCache {
+	[self.refreshControl beginRefreshing];
+	
 	BEClient *client = BEClientController.sharedController.client;
+	client = shouldUseCache ? client.cache : client;
+	
 	[client requestJobStubsPageWithState:BEJobStubStateSurveyNeeded completion:^(BEJobStubPage *page) {
-		if (page == nil) {
-			[SVProgressHUD showErrorWithStatus:@"Could not load forms"];
-			return;
+		if (page != nil) {
+			[self handleReloadFormsSuccessWithPage:page];
+		} else {
+			[self handleReloadFormsFailureCached:shouldUseCache];
 		}
-		
-		self.currentJobStubsPage = page;
-		[self.tableView reloadData];
 	}];
 }
+
+- (void)handleReloadFormsSuccessWithPage:(BEJobStubPage *)page {
+	self.currentJobStubsPage = page;
+	
+	[SVProgressHUD dismiss];
+	[self.refreshControl endRefreshing];
+	
+	[self.tableView reloadData];
+}
+
+- (void)handleReloadFormsFailureCached:(BOOL)shouldUseCache {
+	if (shouldUseCache) {
+		// If we tried to use the cache and it didn't have anything, try to do
+		// a normal network request.
+		[self reloadFormsCached:NO];
+	} else {
+		[SVProgressHUD showErrorWithStatus:@"Unable to load latest jobs"];
+		
+		[self.refreshControl endRefreshing];
+	}
+}
+
+
+#pragma mark - Offline Queue
+
+- (NSString *)currentToolbarTitle {
+	BEOfflineQueue *queue = BEClientController.sharedController.client.offlineQueue;
+	return [NSString stringWithFormat:@"%li forms awaiting submission", queue.numberOfEnqueuedSubmissions];
+}
+
+- (void)offlineQueue:(BEOfflineQueue *)queue didEnqueueSubmission:(BEFormSubmission *)submission {
+	self.toolbarLabel.text = self.currentToolbarTitle;
+	
+	[self.navigationController setToolbarHidden:NO animated:YES];
+}
+
+- (void)offlineQueue:(BEOfflineQueue *)queue didSubmitSubmission:(BEFormSubmission *)submission {
+	self.toolbarLabel.text = self.currentToolbarTitle;
+
+	if (queue.numberOfEnqueuedSubmissions == 0) {
+		[self.navigationController setToolbarHidden:YES animated:YES];
+	}
+}
+
+
+#pragma mark - Actions
+
+- (void)refreshControlDidRefresh:(id)sender {
+	[self reloadFormsCached:NO];
+}
+
 
 #pragma mark - UITableViewDelegate
 
