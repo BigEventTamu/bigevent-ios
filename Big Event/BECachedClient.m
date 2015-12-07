@@ -41,8 +41,35 @@
 @end
 
 
+@interface BECachedClient ()
+
+@property PINCache *diskCache;
+
+@end
+
+
+#define BEReturnCachedResultIfPossible \
+id obj = [self.diskCache objectForKey:key]; \
+if (self.shouldUseCache) { \
+	self.shouldUseCache = NO; \
+	if (obj != nil) { \
+		completion([self.diskCache objectForKey:key]); \
+		return; \
+	} \
+}
+
 @implementation BECachedClient
 
+
+#pragma mark - Lifecycle
+
+- (instancetype)init {
+	self = [super init];
+	
+	self.diskCache = [[PINCache alloc] initWithName:NSStringFromClass(self.class)];
+	
+	return self;
+}
 
 #pragma mark - Proxy
 
@@ -75,7 +102,7 @@ static NSString * BECacheKeyForm(BEAccount *account, NSNumber *formType) {
 #pragma mark - Cache Invalidation
 
 - (void)logout {
-	[PINCache.sharedCache removeAllObjects];
+	[self.diskCache removeAllObjects];
 	
 	[super logout];
 }
@@ -85,17 +112,10 @@ static NSString * BECacheKeyForm(BEAccount *account, NSNumber *formType) {
 
 - (void)requestJobStubsPageWithState:(BEJobStubState)state completion:(void (^)(BEJobStubPage *))completion {
 	NSString *key = BECacheKeyJobStubs(self.currentAccount);
-	
-	if (self.shouldUseCache) {
-		self.shouldUseCache = NO;
-		
-		completion([PINCache.sharedCache objectForKey:key]);
-		
-		return;
-	}
+	BEReturnCachedResultIfPossible
 	
 	[super requestJobStubsPageWithState:state completion:^(BEJobStubPage *page) {
-		[PINCache.sharedCache setObject:page forKey:key];
+		[self.diskCache setObject:page forKey:key];
 		
 		completion(page);
 	}];
@@ -106,17 +126,10 @@ static NSString * BECacheKeyForm(BEAccount *account, NSNumber *formType) {
 
 - (void)requestFormTypesWithCompletion:(void (^)(NSArray<BEFormType *> *))completion {
 	NSString *key = BECacheKeyFormTypes(self.currentAccount);
-	
-	if (self.shouldUseCache) {
-		self.shouldUseCache = NO;
-		
-		completion([PINCache.sharedCache objectForKey:key]);
-		
-		return;
-	}
+	BEReturnCachedResultIfPossible
 	
 	[super requestFormTypesWithCompletion:^(NSArray<BEFormType *> *formTypes) {
-		[PINCache.sharedCache setObject:formTypes forKey:key];
+		[self.diskCache setObject:formTypes forKey:key];
 		
 		completion(formTypes);
 	}];
@@ -127,17 +140,10 @@ static NSString * BECacheKeyForm(BEAccount *account, NSNumber *formType) {
 
 - (void)requestFormWithFormType:(NSNumber *)formTypeID completion:(void (^)(BEForm *))completion {
 	NSString *key = BECacheKeyForm(self.currentAccount, formTypeID);
-	
-	if (self.shouldUseCache) {
-		self.shouldUseCache = NO;
-		
-		completion([PINCache.sharedCache objectForKey:key]);
-		
-		return;
-	}
+	BEReturnCachedResultIfPossible
 	
 	[super requestFormWithFormType:formTypeID completion:^(BEForm *form) {
-		[PINCache.sharedCache setObject:form forKey:key];
+		[self.diskCache setObject:form forKey:key];
 		
 		completion(form);
 	}];

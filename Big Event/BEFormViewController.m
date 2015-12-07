@@ -5,6 +5,8 @@
 #import "NSArray+BEHigherOrder.h"
 #import "BEFormRowDescriptor.h"
 #import "BEClientController.h"
+#import "BEFormSubmission.h"
+#import "BEOfflineQueue.h"
 #import "BEConstants.h"
 
 #import <SVProgressHUD/SVProgressHUD.h>
@@ -24,6 +26,17 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	
+	[self.navigationController setToolbarHidden:YES animated:YES];
+	
+	// If the form we're trying to edit is in the offline queue, return.
+	BEOfflineQueue *offlineQueue = BEClientController.sharedController.client.offlineQueue;
+	if ([offlineQueue submissionExistsWithRequestID:self.stub.requestID]) {
+		[SVProgressHUD showErrorWithStatus:@"Job is already pending submission"];
+		[self performSegueWithIdentifier:BEFormPopSegueIdentifier sender:nil];
+		
+		return;
+	}
 	
 	[self setupNotifications];
 	[self setupNavigationItems];
@@ -103,9 +116,11 @@
 }
 
 - (void)submitFormWithClient:(BEClient *)client {
-	[SVProgressHUD show];
+	BEFormSubmission *submission = [[BEFormSubmission alloc] init];
+	submission.form = self.formValue;
+	submission.requestID = self.stub.requestID;
 	
-	[client submitForm:self.formValue stub:self.stub completion:^(BOOL success) {
+	[client submitForm:submission completion:^(BOOL success) {
 		if (success) {
 			[SVProgressHUD showSuccessWithStatus:@"Submitted"];
 			

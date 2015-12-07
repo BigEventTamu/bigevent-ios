@@ -3,12 +3,15 @@
 
 #import <Foundation/Foundation.h>
 
+#import "BEFormSubmission.h"
+#import "BEOfflineQueue.h"
 #import "BEJobStubPage.h"
 #import "BEFormType.h"
 #import "BEAccount.h"
 #import "BEForm.h"
 
 extern NSString * const BEClientDidLogoutNotification;
+extern NSString * const BEClientDidSubmitFormNotification;
 extern NSString * const BEClientDidUpdateFormTypeNotification;
 
 /// The client object that is responsible for performing network requests.
@@ -21,11 +24,16 @@ extern NSString * const BEClientDidUpdateFormTypeNotification;
 ///
 /// All requests that support caching, when called on this proxy, will return
 /// the cached result, if it exists. If no cached result is available, it will
-/// return an empty type.
+/// attempt to fallback to a normal network request.
 ///
 /// If a request is performed on the cache that does not support caching, it
 /// will perform it as normal by dispatching a network reqeust.
 - (instancetype)cache;
+
+
+#pragma mark - Offline
+
+@property (readonly) BEOfflineQueue *offlineQueue;
 
 
 #pragma mark - Authentication
@@ -60,7 +68,7 @@ extern NSString * const BEClientDidUpdateFormTypeNotification;
 - (void)requestFormTypesWithCompletion:(void (^)(NSArray<BEFormType *> *types))completion;
 
 - (void)requestFormWithFormType:(NSNumber *)formTypeID completion:(void (^)(BEForm *form))completion;
-- (void)submitForm:(BEForm *)form stub:(BEJobStub *)stub completion:(void (^)(BOOL success))completion;
+- (void)submitForm:(BEFormSubmission *)formSubmission completion:(void (^)(BOOL success))completion;
 
 
 #pragma mark - Jobs

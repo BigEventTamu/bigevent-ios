@@ -12,6 +12,7 @@
 
 // Notifications.
 NSString * const BEClientDidLogoutNotification = @"BEClientDidLogout";
+NSString * const BEClientDidSubmitFormNotification = @"BEClientDidSubmitForm";
 NSString * const BEClientDidUpdateFormTypeNotification = @"BEClientDidUpdateFormType";
 
 // Keychain.
@@ -31,9 +32,10 @@ static NSString * const BEClientFormResource = @"form/";
 typedef void (^BERequestCompletion)(NSData *data, NSHTTPURLResponse *response, NSError *error);
 
 
-@interface BEClient () <NSURLSessionDelegate>
+@interface BEClient () <NSURLSessionDelegate, BEOfflineQueueSubmissionDelegate>
 
 @property (nonatomic, copy) NSString *token;
+@property (readwrite) BEOfflineQueue *offlineQueue;
 @property (readwrite, nonatomic, strong) BEAccount *currentAccount;
 
 @end
@@ -42,12 +44,28 @@ typedef void (^BERequestCompletion)(NSData *data, NSHTTPURLResponse *response, N
 @implementation BEClient
 @synthesize currentAccount = _currentAccount;
 
+#pragma mark - Lifecycle
+
+- (instancetype)init {
+	self = [super init];
+	
+	self.offlineQueue = [[BEOfflineQueue alloc] initWithSubmissionDelegate:self];
+	
+	return self;
+}
 
 #pragma mark - Caching
 
 - (instancetype)cache {
 	// Overridden in caching subclass.
 	return self;
+}
+
+
+#pragma mark - BEOfflineQueueSubmissionDelegate
+
+- (void)offlineQueue:(BEOfflineQueue *)queue submitObject:(BEFormSubmission *)submission completion:(void (^)(BOOL))completion {
+	[self submitForm:submission completion:completion];
 }
 
 
@@ -260,34 +278,40 @@ static NSString * BEAuthorizationToken(NSString *token) {
 	[task resume];
 }
 
-- (void)submitForm:(BEForm *)form stub:(BEJobStub *)stub completion:(void (^)(BOOL))completion {
+- (void)submitForm:(BEFormSubmission *)formSubmission completion:(void (^)(BOOL))completion {
 	if (self.token == nil) {
 		completion(NO);
 		return;
 	}
 	
+	// If we're offline, enqueue it for later submission.
+	if (!self.offlineQueue.internetReachable) {
+		[self.offlineQueue addSubmission:formSubmission];
+		completion(YES);
+		return;
+	}
+	
 	NSString *resource = BEClientFormResource;
-	resource = [resource stringByAppendingPathComponent:form.formTypeID.stringValue];
+	resource = [resource stringByAppendingPathComponent:formSubmission.form.formTypeID.stringValue];
 	
 	// Encode the form and the job request id into url-encoded parameters.
-	NSMutableDictionary *parameters = form.parameterValue.mutableCopy;
+	NSMutableDictionary *parameters = formSubmission.form.parameterValue.mutableCopy;
 	[parameters addEntriesFromDictionary:@{
-		@"job_request_id": stub.requestID
+		@"job_request_id": formSubmission.requestID
 	}];
 	
 	BERequestCompletion requestCompletion = ^(NSData *data, NSHTTPURLResponse *response, NSError *error) {
 		if (response.be_statusSuccess && data != nil) {
-			NSString *identifier = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-
-			NSLog(@"unique form ID: %@", identifier);
+			// Identifier, currently unused.
+			// NSString *identifier = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 			completion(YES);
+			
+			[NSNotificationCenter.defaultCenter postNotificationName:BEClientDidSubmitFormNotification object:formSubmission];
 		} else {
 			completion(NO);
 		}
 	};
-	
-	NSLog(@"form params: %@", parameters.be_URLEncodedParameters);
-	
+		
 	NSURLSessionDataTask *task = [self POSTRequestWithResource:resource parameters:parameters completion:requestCompletion];
 	[task resume];
 }

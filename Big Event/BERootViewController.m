@@ -4,13 +4,15 @@
 #import "BERootViewController.h"
 #import "BEFormViewController.h"
 #import "BEClientController.h"
+#import "BEOfflineQueue.h"
 #import "BEConstants.h"
 
 #import <SVProgressHUD/SVProgressHUD.h>
 
 
-@interface BERootViewController () <BEFormDelegate>
+@interface BERootViewController () <BEFormDelegate, BEOfflineQueueDelegate>
 
+@property UILabel *toolbarLabel;
 @property BEJobStubPage *currentJobStubsPage;
 
 @end
@@ -27,6 +29,7 @@
 	[self configureHUD];
 	[self registerNotifications];
 	[self setupRefreshControl];
+	[self setupOfflineQueue];
 	
 	// If not authenticated, present the accounts modal.
 	if (!BEClientController.sharedController.client.authenticated) {
@@ -34,6 +37,12 @@
 	} else {
 		[self reloadFormsCached:YES];
 	}
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	
+	[self setupToolbar];
 }
 
 - (void)configureHUD {
@@ -48,6 +57,31 @@
 	
 	[self.tableView addSubview:refreshControl];
 	self.refreshControl = refreshControl;
+}
+
+- (void)setupOfflineQueue {
+	[BEClientController.sharedController.client.offlineQueue addDelegate:self];
+}
+
+- (void)setupToolbar {
+	BEOfflineQueue *queue = BEClientController.sharedController.client.offlineQueue;
+	if (queue.numberOfEnqueuedSubmissions > 0) {
+		[self.navigationController setToolbarHidden:NO animated:YES];
+	}
+	
+	UILabel *label = [[UILabel alloc] init];
+	label.text = self.currentToolbarTitle;
+	label.font = [UIFont systemFontOfSize:13];
+	label.textAlignment = NSTextAlignmentCenter;
+	label.frame = self.navigationController.toolbar.bounds;
+	
+	self.toolbarLabel = label;
+	
+	UIBarButtonItem *labelItem = [[UIBarButtonItem alloc] initWithCustomView:label];
+	UIBarButtonItem *spacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+	NSArray *items = @[ spacer, labelItem, spacer ];
+	
+	self.navigationController.toolbar.items = items;
 }
 
 
@@ -65,10 +99,15 @@
 - (void)registerNotifications {
 	NSNotificationCenter *nc = NSNotificationCenter.defaultCenter;
 	[nc addObserver:self selector:@selector(clientDidLogout:) name:BEClientDidLogoutNotification object:nil];
+	[nc addObserver:self selector:@selector(clientDidSubmitForm:) name:BEClientDidSubmitFormNotification object:nil];
 }
 
 - (void)clientDidLogout:(NSNotification *)note {
 	[self.tableView reloadData];
+}
+
+- (void)clientDidSubmitForm:(NSNotification *)note {
+	[self reloadFormsCached:NO];
 }
 
 
@@ -107,6 +146,28 @@
 		[SVProgressHUD showErrorWithStatus:@"Unable to load latest jobs"];
 		
 		[self.refreshControl endRefreshing];
+	}
+}
+
+
+#pragma mark - Offline Queue
+
+- (NSString *)currentToolbarTitle {
+	BEOfflineQueue *queue = BEClientController.sharedController.client.offlineQueue;
+	return [NSString stringWithFormat:@"%li forms awaiting submission", queue.numberOfEnqueuedSubmissions];
+}
+
+- (void)offlineQueue:(BEOfflineQueue *)queue didEnqueueSubmission:(BEFormSubmission *)submission {
+	self.toolbarLabel.text = self.currentToolbarTitle;
+	
+	[self.navigationController setToolbarHidden:NO animated:YES];
+}
+
+- (void)offlineQueue:(BEOfflineQueue *)queue didSubmitSubmission:(BEFormSubmission *)submission {
+	self.toolbarLabel.text = self.currentToolbarTitle;
+
+	if (queue.numberOfEnqueuedSubmissions == 0) {
+		[self.navigationController setToolbarHidden:YES animated:YES];
 	}
 }
 

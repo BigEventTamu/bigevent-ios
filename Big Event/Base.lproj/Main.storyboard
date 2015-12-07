@@ -53,6 +53,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="VEg-nZ-azQ"/>
                     </navigationItem>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xQV-5u-et7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
