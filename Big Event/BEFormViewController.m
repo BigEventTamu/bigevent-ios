@@ -68,14 +68,21 @@
 	[self.tableView endEditing:YES];
 	
 	// Validate the form and let users know of any mistakes they made.
-	NSArray *validationErrors = self.formValidationErrors;
-	if (validationErrors.count > 0){
-		[self showFormValidationError:validationErrors.firstObject];
-		return;
+	NSArray<NSError *> *validationErrors = self.formValidationErrors;
+	if (validationErrors.count > 0) {
+		// Present an alert view informing the user of the first error.
+		NSString *title = @"Submission error";
+		NSString *message = validationErrors.firstObject.localizedDescription;
+		UIAlertControllerStyle style = UIAlertControllerStyleAlert;
+		
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:style];
+		[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+		
+		[self presentViewController:alert animated:YES completion:nil];
+	} else {
+		BEClient *client = BEClientController.sharedController.client;
+		[self submitFormWithClient:client];
 	}
-	
-	BEClient *client = BEClientController.sharedController.client;
-	[self submitFormWithClient:client];
 }
 
 
