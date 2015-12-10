@@ -115,6 +115,7 @@
 	
 	for (BEField *field in formData.fields) {
 		BEFormRowDescriptor *row = [BEFormRowDescriptor formDescriptorWithField:field];
+		field.value = row.value;
 		[section addFormRow:row];
 	}
 	
