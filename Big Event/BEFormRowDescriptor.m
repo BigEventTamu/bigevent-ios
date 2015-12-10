@@ -34,6 +34,13 @@ static NSString * BEXLFormTypeFromBEFormType(BEFieldType type) {
 	row.title = field.name;
 	row->_field = field;
 	
+	// Since users might not enable the switch on a boolean value, it might not
+	// have a value. When submitting, this means that it will consider the row
+	// as incomplete. To work around this, just default it to NO.
+	if (field.type == BEFieldTypeBoolean) {
+		row.value = @(NO).stringValue;
+	}
+	
 	if (field.choices != nil) {
 		row.selectorOptions = [field.choices be_map:^id(BEChoice *choice) {
 			return [XLFormOptionsObject formOptionsObjectWithValue:choice.choiceID displayText:choice.value];
